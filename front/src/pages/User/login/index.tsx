@@ -37,8 +37,6 @@ const LoginMessage: React.FC<{
     showIcon
   />
 );
-    console.log(123);
-    
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
   const { status, type: loginType } = userLogin;
