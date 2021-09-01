@@ -52,4 +52,18 @@ const request = extend({
   credentials: 'include', // Does the default request bring cookies
 });
 
+request.interceptors.request.use(async (url, options) => {
+  if (sessionStorage.getItem('token')) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'FRONTTOKEN': sessionStorage.getItem('token'),
+    };
+    return {
+      url,
+      options: { ...options, headers },
+    };
+  }
+});
+
 export default request;

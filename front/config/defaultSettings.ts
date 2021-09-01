@@ -13,9 +13,13 @@ const proSettings: DefaultSettings = {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
+  title: 'Demand-Side Platform',
   pwa: false,
   iconfontUrl: '',
+  menu: {
+
+    locale: false,  //关闭国际化
+  },
 };
 
 export type { DefaultSettings };

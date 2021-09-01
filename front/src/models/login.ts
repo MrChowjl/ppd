@@ -8,8 +8,8 @@ import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
 
 export type StateType = {
-  status?: 'ok' | 'error';
-  type?: string;
+  status?: number;
+  msg?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 };
 
@@ -35,14 +35,17 @@ const Model: LoginModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
+      console.log(response)
+      
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.code === 1) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
+        sessionStorage.setItem('token', response.data.token)
         message.success('🎉 🎉 🎉  登录成功！');
         let { redirect } = params as { redirect: string };
         if (redirect) {
@@ -83,8 +86,8 @@ const Model: LoginModelType = {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        status: payload.code,
+        msg: payload.msg,
       };
     },
   },
