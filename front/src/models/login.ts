@@ -2,7 +2,7 @@ import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { fakeAccountLogin, logout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
@@ -36,7 +36,7 @@ const Model: LoginModelType = {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       console.log(response)
-      
+
       yield put({
         type: 'changeLoginStatus',
         payload: response,
@@ -68,6 +68,9 @@ const Model: LoginModelType = {
     },
 
     logout() {
+      logout().then(res => {
+        sessionStorage.removeItem('token')
+      })
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {

@@ -18,3 +18,7 @@ export async function register(params: LoginParamsType) {
     data: params,
   });
 }
+
+export async function logout(): Promise<any> {
+  return request('/v1/member/login_out');
+}

@@ -25,36 +25,89 @@
             routes: [
               {
                 path: '/',
-                redirect: '/welcome',
+                redirect: '/index',
               },
               {
-                path: '/welcome',
-                name: 'welcome',
+                path: '/index',
+                name: '首页',
                 icon: 'smile',
-                component: './Welcome',
+                component: './Index',
               },
               {
-                path: '/admin',
-                name: 'admin',
-                icon: 'crown',
-                component: './Admin',
-                authority: ['admin'],
+                path: '/list',
+                name: '数据报表',
+                icon: 'smile',
+                component: './List',
+              },
+              {
+                path: '/account',
+                name: '投放账户',
+                icon: 'smile',
+                // component: './Account/Index',
                 routes: [
                   {
-                    path: '/admin/sub-page',
-                    name: 'sub-page',
-                    icon: 'smile',
-                    component: './Welcome',
-                    authority: ['admin'],
+                    name: '账户列表',
+                    path: '/account/list',
+                    component: './Account/List',
                   },
+                  {
+                    name: '基本概况',
+                    path: '/account/basic',
+                    component: './Account/Basic',
+                  },
+                  {
+                    name: '广告计划',
+                    path: '/account/adplan',
+                    component: './Account/Adplan',
+                  },
+                  {
+                    name: '数据报表',
+                    path: '/account/datalist',
+                    component: './Account/Datalist',
+                  },
+                  {
+                    name: '素材库',
+                    path: '/account/trend',
+                    component: './Account/Trend',
+                  },
+                  {
+                    name: '人群包',
+                    path: '/account/peoplebag',
+                    component: './Account/Peoplebag',
+                  }
                 ],
               },
               {
-                name: 'list.table-list',
-                icon: 'table',
-                path: '/list',
-                component: './TableList',
+                path: '/project',
+                name: '项目',
+                icon: 'smile',
+                component: './Project',
               },
+              {
+                path: '/adowner',
+                name: '广告主',
+                icon: 'smile',
+                component: './Adowner',
+              },
+              {
+                path: '/subuser',
+                name: '子用户',
+                icon: 'smile',
+                component: './Subuser',
+              },
+              // {
+              //   name: 'table-list',
+              //   icon: 'table',
+              //   path: '/list',
+              //   component: './list/index',
+              //   routes: [
+              //     {
+              //       name: 'analysis',
+              //       path: '/list/analysis',
+              //       component: './list/index',
+              //     }
+              //   ],
+              // },
               {
                 component: './404',
               },
