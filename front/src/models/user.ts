@@ -3,17 +3,19 @@ import type { Effect, Reducer } from 'umi';
 import { queryCurrent, query as queryUsers } from '@/services/user';
 
 export type CurrentUser = {
-  avatar?: string;
-  name?: string;
-  title?: string;
-  group?: string;
-  signature?: string;
+  created_at?: string;
+  email?: string;
+  id?: number;
+  is_inner?: number;
+  is_primary?: number;
   tags?: {
     key: string;
     label: string;
   }[];
-  userid?: string;
-  unreadCount?: number;
+  logined_at?: string;
+  role?: number;
+  true_name?: string;
+  updated_at?: string;
 };
 
 export type UserModelState = {

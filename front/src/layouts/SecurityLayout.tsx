@@ -38,16 +38,19 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     // You can replace it to your authentication rule (such as check token exists)
     // You can replace it with your own login authentication rules (such as judging whether the token exists)
     console.log(currentUser)
-    
+
     const isLogin = currentUser
+    const { email } = currentUser
+    console.log(email)
+    
     const queryString = stringify({
       redirect: window.location.href,
     });
 
-    if ((!isLogin && loading) || !isReady) {
+    if ((!email && loading) || !isReady) {
       return <PageLoading />;
     }
-    if (!isLogin && window.location.pathname !== '/user/login') {
+    if (!email && window.location.pathname !== '/user/login') {
       return <Redirect to={`/user/login?${queryString}`} />;
     }
     return children;

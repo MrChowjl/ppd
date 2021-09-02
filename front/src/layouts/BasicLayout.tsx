@@ -12,7 +12,7 @@ import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import React, { useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, useIntl, connect, history } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
+import Footer from './../components/Footer';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -54,29 +54,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const defaultFooterDom = (
-  <DefaultFooter
-    copyright={`${new Date().getFullYear()} Produced by Ant Group Experience Technology Department`}
-    links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
-    ]}
-  />
+  <Footer />
 );
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
@@ -114,7 +92,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       },
     [location.pathname],
   );
-  const {} = useIntl();
+  const { } = useIntl();
   return (
     <ProLayout
       logo={logo}
@@ -166,9 +144,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         fontColor: 'rgba(24,144,255,0.15)',
       }}
     >
-      <Authorized authority={authorized!.authority} noMatch={noMatch}>
-        {children}
-      </Authorized>
+      
     </ProLayout>
   );
 };
