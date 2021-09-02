@@ -19,6 +19,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import logo from '../assets/logo.svg';
+import { bold } from 'chalk';
 const noMatch = (
   <Result
     status={403}
@@ -95,9 +96,26 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const { } = useIntl();
   return (
     <ProLayout
-      logo={logo}
       {...props}
       {...settings}
+      layout='top'
+      menuHeaderRender={() => {
+        return (
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            color: '#fff',
+            alignItems: 'center',
+            width: 240,
+            padding: '0px 20px',
+            fontSize: 15,
+            fontWeight: 'bolder'
+          }}>
+            <img src={logo} alt="" />
+            <div>Demand-Side Platform</div>
+          </div>
+        )
+      }}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
@@ -140,11 +158,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         return menuData || [];
       }}
       waterMarkProps={{
-        content: 'Ant Design Pro',
+        content: 'Demand-Side Platform',
         fontColor: 'rgba(24,144,255,0.15)',
       }}
     >
-      
+
     </ProLayout>
   );
 };

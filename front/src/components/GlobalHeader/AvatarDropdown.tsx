@@ -1,5 +1,5 @@
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Menu, Spin } from 'antd';
+import { Avatar, Menu, Spin, Tag } from 'antd';
 import React from 'react';
 import type { ConnectProps } from 'umi';
 import { history, connect } from 'umi';
@@ -13,10 +13,19 @@ export type GlobalHeaderRightProps = {
   menu?: boolean;
 } & Partial<ConnectProps>;
 
+const ENVTagColor = {
+  dev: 'orange',
+  test: 'green',
+  pre: '#87d068',
+};
+const tagContent = {
+  0: '广告投放师',
+  5: '投放经理',
+  9: '管理员'
+}
 class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   onMenuClick = (event: { key: React.Key; keyPath: React.Key[]; item: React.ReactInstance }) => {
     const { key } = event;
-
     if (key === 'logout') {
       const { dispatch } = this.props;
 
@@ -35,11 +44,13 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   render(): React.ReactNode {
     const {
       currentUser = {
-        avatar: '',
-        name: '',
+        role: '',
+        true_name: '',
       },
       menu,
     } = this.props;
+    console.log(currentUser)
+
     const menuHeaderDropdown = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={this.onMenuClick}>
         {menu && (
@@ -62,11 +73,14 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.name ? (
+    return currentUser && currentUser.true_name ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+          <Avatar size="small" className={styles.avatar} alt="avatar" />
+          <span className={`${styles.name} anticon`}>{currentUser.true_name}</span>
+          <span style={{marginLeft: 10}}>
+           <Tag color={'#87d068'}>{tagContent[currentUser?.role as number]}</Tag>
+          </span>
         </span>
       </HeaderDropdown>
     ) : (

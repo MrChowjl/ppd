@@ -117,6 +117,10 @@ const Login: React.FC<LoginProps> = (props) => {
                   required: true,
                   message: '用户名是必填项！',
                 },
+                {
+                  pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+                  message: '邮箱格式错误！',
+                }
               ]}
             />
             <ProFormText.Password
@@ -150,23 +154,49 @@ const Login: React.FC<LoginProps> = (props) => {
                   required: true,
                   message: '邮箱是必填项！',
                 },
-                // {
-                //   pattern: /^1\d{10}$/,
-                //   message: '不合法的邮箱！',
-                // },
+                {
+                  pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+                  message: '邮箱格式错误！',
+                }
               ]} name="email" placeholder="登录邮箱" />
             <ProFormText.Password fieldProps={{
               size: 'large',
               prefix: <LockOutlined className={styles.prefixIcon} />,
-            }} width="md" name="password" placeholder="密码" />
+            }}
+              rules={[
+                {
+                  required: true,
+                  message: '密码是必填项！',
+                }
+              ]} width="md" name="password" placeholder="密码" />
             <ProFormText.Password fieldProps={{
               size: 'large',
               prefix: <LockOutlined className={styles.prefixIcon} />,
-            }} width="md" name="confirm_pwd" placeholder="确认密码" />
+            }}
+            rules={[
+              {
+                required: true,
+                message: '确认密码是必填项！',
+              }
+            ]} width="md" name="confirm_pwd" placeholder="确认密码" />
             <ProFormText width="md" fieldProps={{
               size: 'large',
               prefix: <UserOutlined className={styles.prefixIcon} />,
-            }} name="true_name" placeholder="真实姓名" />
+            }}
+            rules={[
+              {
+                required: true,
+                message: '姓名是必填项！',
+              },
+              {
+                max: 10,
+                message: '您的名字应该没有这么长!',
+              },
+              {
+                pattern: /^[\u4E00-\u9FA5]/,
+                message: '请输入正确的中文名字'
+              }
+            ]} name="true_name" placeholder="真实姓名" />
           </>
         )}
         <div

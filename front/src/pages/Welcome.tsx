@@ -15,7 +15,7 @@ const CodePreview: React.FC = ({ children }) => (
 export default (): React.ReactNode => {
   const intl = useIntl();
   return (
-    <PageContainer>
+    <PageContainer pageHeaderRender={false} title={false} breadcrumbRender={false} ghost={false}>
       <Card>
         <Alert
           message={intl.formatMessage({
