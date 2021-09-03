@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Button, Tag, Space, Menu, Dropdown } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
-import request from 'umi-request';
+import AccountEdit from './components/AccountEdit'
 
 type GithubIssueItem = {
   url: string;
@@ -132,45 +132,52 @@ const columns: ProColumns<GithubIssueItem>[] = [
 ];
 
 
-export default () => {
+const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
+  const [editShow, seteditShow] = useState<boolean>(true)
+  console.log(editShow)
+  
   return (
-    <ProTable<GithubIssueItem>
-      columns={columns}
-      actionRef={actionRef}
-      request={async (params = {}, sort, filter) => {
-        console.log(sort, filter);
-        return []
-      }}
-      editable={{
-        type: 'multiple',
-      }}
-      rowKey="id"
-      search={{
-        labelWidth: 'auto',
-      }}
-      form={{
-        // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-        syncToUrl: (values, type) => {
-          if (type === 'get') {
-            return {
-              ...values,
-              created_at: [values.startTime, values.endTime],
-            };
-          }
-          return values;
-        },
-      }}
-      pagination={{
-        pageSize: 5,
-      }}
-      dateFormatter="string"
-      headerTitle={false}
-      toolBarRender={() => [
-        <Button key="button" icon={<PlusOutlined />} type="primary">
-          创建投放账户
-        </Button>
-      ]}
-    />
+    <>
+      <ProTable<GithubIssueItem>
+        columns={columns}
+        actionRef={actionRef}
+        request={async (params = {}, sort, filter) => {
+          console.log(sort, filter);
+          return []
+        }}
+        editable={{
+          type: 'multiple',
+        }}
+        rowKey="id"
+        search={{
+          labelWidth: 'auto',
+        }}
+        form={{
+          // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
+          syncToUrl: (values, type) => {
+            if (type === 'get') {
+              return {
+                ...values,
+                created_at: [values.startTime, values.endTime],
+              };
+            }
+            return values;
+          },
+        }}
+        pagination={{
+          pageSize: 5,
+        }}
+        dateFormatter="string"
+        headerTitle={false}
+        toolBarRender={() => [
+          <Button key="button" icon={<PlusOutlined />} onClick={() =>seteditShow(true)} type="primary">
+            创建投放账户
+          </Button>
+        ]}
+      />
+      {editShow&&<AccountEdit onCancel={() => seteditShow(false)} />}
+    </>
   );
 };
+export default Page

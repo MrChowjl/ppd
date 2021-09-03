@@ -111,7 +111,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             fontSize: 15,
             fontWeight: 'bolder'
           }}>
-            <img src={logo} alt="" />
+            <img style={{ maxWidth: 30 }} src={logo} alt="" />
             <div>Demand-Side Platform</div>
           </div>
         )
