@@ -18,7 +18,7 @@ const proSettings: DefaultSettings = {
   iconfontUrl: '',
   menu: {
 
-    locale: false,  //关闭国际化
+    locale: true,  //关闭国际化
   },
 };
 

@@ -16,7 +16,7 @@ import type { StateType } from '@/models/login';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
 import styles from './index.less';
-import { register } from './../../../services/login'
+import { register } from './../../../services/login';
 export type LoginProps = {
   dispatch: Dispatch;
   userLogin: StateType;
@@ -38,23 +38,26 @@ const LoginMessage: React.FC<{
 
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
-  console.log(userLogin)
-
+  console.log(userLogin);
   const { status, msg } = userLogin;
   const [regorlog, setType] = useState<string>('account');
 
   const handleSubmit = async (values: LoginParamsType) => {
     const { dispatch } = props;
+
     if (regorlog === 'register') {
-      let res = await register(values)
+      let res = await register(values);
+
       if (res.code === 1) {
         message.success('注册成功，请登录！');
-        setType('account')
+        setType('account');
       } else {
-        message.error(res.msg)
+        message.error(res.msg);
       }
-      return
+
+      return;
     }
+
     dispatch({
       type: 'login/login',
       payload: { ...values },
@@ -67,7 +70,7 @@ const Login: React.FC<LoginProps> = (props) => {
         initialValues={{
           autoLogin: true,
           email: '18398216881@163.com',
-          password: '18398216881'
+          password: '18398216881',
         }}
         submitter={{
           render: (_, dom) => dom.pop(),
@@ -84,26 +87,20 @@ const Login: React.FC<LoginProps> = (props) => {
           return Promise.resolve();
         }}
       >
-        <Tabs activeKey={regorlog} onChange={(v) => {
-          setType(v)
-        }
-        }>
-          <Tabs.TabPane
-            key="account"
-            tab='邮箱登录'
-          />
-          <Tabs.TabPane
-            key="register"
-            tab="新用户注册"
-          />
+        <Tabs
+          activeKey={regorlog}
+          onChange={(v) => {
+            setType(v);
+          }}
+        >
+          <Tabs.TabPane key="account" tab="邮箱登录" />
+          <Tabs.TabPane key="register" tab="新用户注册" />
         </Tabs>
 
         {regorlog === 'account' && (
           <>
             {status === -1 && regorlog === 'account' && !submitting && (
-              <LoginMessage
-                content={msg as string}
-              />
+              <LoginMessage content={msg as string} />
             )}
             <ProFormText
               name="email"
@@ -120,7 +117,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 {
                   pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
                   message: '邮箱格式错误！',
-                }
+                },
               ]}
             />
             <ProFormText.Password
@@ -145,10 +142,12 @@ const Login: React.FC<LoginProps> = (props) => {
             {status === -1 && regorlog === 'register' && !submitting && (
               <LoginMessage content={msg as string} />
             )}
-            <ProFormText width="md" fieldProps={{
-              size: 'large',
-              prefix: <MailOutlined className={styles.prefixIcon} />,
-            }}
+            <ProFormText
+              width="md"
+              fieldProps={{
+                size: 'large',
+                prefix: <MailOutlined className={styles.prefixIcon} />,
+              }}
               rules={[
                 {
                   required: true,
@@ -157,46 +156,64 @@ const Login: React.FC<LoginProps> = (props) => {
                 {
                   pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
                   message: '邮箱格式错误！',
-                }
-              ]} name="email" placeholder="登录邮箱" />
-            <ProFormText.Password fieldProps={{
-              size: 'large',
-              prefix: <LockOutlined className={styles.prefixIcon} />,
-            }}
+                },
+              ]}
+              name="email"
+              placeholder="登录邮箱"
+            />
+            <ProFormText.Password
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined className={styles.prefixIcon} />,
+              }}
               rules={[
                 {
                   required: true,
                   message: '密码是必填项！',
-                }
-              ]} width="md" name="password" placeholder="密码" />
-            <ProFormText.Password fieldProps={{
-              size: 'large',
-              prefix: <LockOutlined className={styles.prefixIcon} />,
-            }}
-            rules={[
-              {
-                required: true,
-                message: '确认密码是必填项！',
-              }
-            ]} width="md" name="confirm_pwd" placeholder="确认密码" />
-            <ProFormText width="md" fieldProps={{
-              size: 'large',
-              prefix: <UserOutlined className={styles.prefixIcon} />,
-            }}
-            rules={[
-              {
-                required: true,
-                message: '姓名是必填项！',
-              },
-              {
-                max: 10,
-                message: '您的名字应该没有这么长!',
-              },
-              {
-                pattern: /^[\u4E00-\u9FA5]/,
-                message: '请输入正确的中文名字'
-              }
-            ]} name="true_name" placeholder="真实姓名" />
+                },
+              ]}
+              width="md"
+              name="password"
+              placeholder="密码"
+            />
+            <ProFormText.Password
+              fieldProps={{
+                size: 'large',
+                prefix: <LockOutlined className={styles.prefixIcon} />,
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: '确认密码是必填项！',
+                },
+              ]}
+              width="md"
+              name="confirm_pwd"
+              placeholder="确认密码"
+            />
+            <ProFormText
+              width="md"
+              fieldProps={{
+                size: 'large',
+                prefix: <UserOutlined className={styles.prefixIcon} />,
+              }}
+              rules={[
+                {
+                  required: true,
+                  message: '姓名是必填项！',
+                },
+                {
+                  max: 10,
+                  message: '您的名字应该没有这么长!',
+                },
+                {
+                  pattern: /^[\u4E00-\u9FA5]/,
+                  message: '请输入正确的中文名字',
+                },
+              ]}
+              name="true_name"
+              placeholder="真实姓名"
+            />
           </>
         )}
         <div
