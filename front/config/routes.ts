@@ -30,19 +30,19 @@
               {
                 path: '/index',
                 name: '首页',
-                icon: 'smile',
+                icon: 'CloudOutlined',
                 component: './Index',
               },
               {
                 path: '/list',
                 name: '数据报表',
-                icon: 'smile',
+                icon: 'ProfileOutlined',
                 component: './List',
               },
               {
                 path: '/account',
                 name: '投放账户',
-                icon: 'smile',
+                icon: 'DeploymentUnitOutlined',
                 // component: './Account/Index',
                 routes: [
                   {
@@ -80,34 +80,21 @@
               {
                 path: '/project',
                 name: '项目',
-                icon: 'smile',
+                icon: 'ReconciliationOutlined',
                 component: './Project',
               },
               {
                 path: '/adowner',
                 name: '广告主',
-                icon: 'smile',
+                icon: 'IdcardOutlined',
                 component: './Adowner',
               },
               {
                 path: '/subuser',
                 name: '子用户',
-                icon: 'smile',
+                icon: 'PartitionOutlined',
                 component: './Subuser',
               },
-              // {
-              //   name: 'table-list',
-              //   icon: 'table',
-              //   path: '/list',
-              //   component: './list/index',
-              //   routes: [
-              //     {
-              //       name: 'analysis',
-              //       path: '/list/analysis',
-              //       component: './list/index',
-              //     }
-              //   ],
-              // },
               {
                 component: './404',
               },

@@ -8,14 +8,21 @@ const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
   hash: true,
-  antd: {},
+  antd: {
+    dark: true, // 开启暗色主题
+  },
   dva: {
     hmr: true,
   },
   history: {
     type: 'browser',
   },
-  locale: false,
+  locale: {
+    // default zh-CN
+    default: 'zh-CN',
+    antd: true,
+    baseNavigator: true,
+  },
   dynamicImport: {
     loading: '@/components/PageLoading/index',
   },

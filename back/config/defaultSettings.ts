@@ -16,6 +16,10 @@ const proSettings: DefaultSettings = {
   title: 'Demand-Side Platform',
   pwa: false,
   iconfontUrl: '',
+  menu: {
+
+    locale: true,  //关闭国际化
+  },
 };
 
 export type { DefaultSettings };

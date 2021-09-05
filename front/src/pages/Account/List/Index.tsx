@@ -23,16 +23,85 @@ type GithubIssueItem = {
 
 const columns: ProColumns<GithubIssueItem>[] = [
   {
+    title: '所有广告主',
+    hideInForm: true,
+    valueType: 'select',
+    valueEnum: {
+      all: { text: '全部' },
+      付小小: { text: '付小小' },
+      曲丽丽: { text: '曲丽丽' },
+      林东东: { text: '林东东' },
+      陈帅帅: { text: '陈帅帅' },
+      兼某某: { text: '兼某某' },
+    },
+  },
+  {
+    title: '所有媒体',
+    hideInForm: true,
+    valueType: 'select',
+    valueEnum: {
+      all: { text: '全部' },
+      付小小: { text: '付小小' },
+      曲丽丽: { text: '曲丽丽' },
+      林东东: { text: '林东东' },
+      陈帅帅: { text: '陈帅帅' },
+      兼某某: { text: '兼某某' },
+    },
+  },
+  {
+    title: '所有投放类型',
+    hideInForm: true,
+    valueType: 'select',
+    valueEnum: {
+      all: { text: '全部' },
+      付小小: { text: '付小小' },
+      曲丽丽: { text: '曲丽丽' },
+      林东东: { text: '林东东' },
+      陈帅帅: { text: '陈帅帅' },
+      兼某某: { text: '兼某某' },
+    },
+  },
+  {
+    title: '所有状态',
+    hideInForm: true,
+    valueType: 'select',
+    valueEnum: {
+      all: { text: '全部' },
+      付小小: { text: '付小小' },
+      曲丽丽: { text: '曲丽丽' },
+      林东东: { text: '林东东' },
+      陈帅帅: { text: '陈帅帅' },
+      兼某某: { text: '兼某某' },
+    },
+  },
+  {
     dataIndex: 'index',
     valueType: 'indexBorder',
+    title: 'id',
     width: 48,
   },
   {
-    title: '标题',
+    title: '投放账户名称',
     dataIndex: 'title',
+    valueType: 'indexBorder',
+    width: 150,
     copyable: true,
     ellipsis: true,
-    tip: '标题过长会自动收缩',
+    formItemProps: {
+      rules: [
+        {
+          required: true,
+          message: '此项为必填项',
+        },
+      ],
+    },
+  },
+  {
+    title: '开关',
+    dataIndex: 'title',
+    valueType: 'indexBorder',
+    copyable: true,
+    ellipsis: true,
     formItemProps: {
       rules: [
         {
@@ -45,6 +114,7 @@ const columns: ProColumns<GithubIssueItem>[] = [
   {
     title: '状态',
     dataIndex: 'state',
+    hideInSearch: true,
     filters: true,
     onFilter: true,
     valueType: 'select',
@@ -66,43 +136,59 @@ const columns: ProColumns<GithubIssueItem>[] = [
     },
   },
   {
-    title: '标签',
-    dataIndex: 'labels',
-    search: false,
-    renderFormItem: (_, { defaultRender }) => {
-      return defaultRender(_);
-    },
-    render: (_, record) => (
-      <Space>
-        {record.labels.map(({ name, color }) => (
-          <Tag color={color} key={name}>
-            {name}
-          </Tag>
-        ))}
-      </Space>
-    ),
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '广告主',
   },
   {
-    title: '创建时间',
-    key: 'showTime',
-    dataIndex: 'created_at',
-    valueType: 'dateTime',
-    sorter: true,
-    hideInSearch: true,
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '媒体'
   },
   {
-    title: '创建时间',
-    dataIndex: 'created_at',
-    valueType: 'dateRange',
-    hideInTable: true,
-    search: {
-      transform: (value) => {
-        return {
-          startTime: value[0],
-          endTime: value[1],
-        };
-      },
-    },
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '投放类型'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '总预算'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '日预算'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '剩余金额'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '今日消耗'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '昨日消耗'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '计划数'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '单元数'
+  },
+  {
+    dataIndex: 'index',
+    valueType: 'indexBorder',
+    title: '创意数'
   },
   {
     title: '操作',
@@ -136,7 +222,7 @@ const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(true)
   console.log(editShow)
-  
+
   return (
     <>
       <ProTable<GithubIssueItem>
@@ -171,12 +257,12 @@ const Page: React.FC = () => {
         dateFormatter="string"
         headerTitle={false}
         toolBarRender={() => [
-          <Button key="button" icon={<PlusOutlined />} onClick={() =>seteditShow(true)} type="primary">
+          <Button key="button" icon={<PlusOutlined />} onClick={() => seteditShow(true)} type="primary">
             创建投放账户
           </Button>
         ]}
       />
-      {editShow&&<AccountEdit onCancel={() => seteditShow(false)} />}
+      {editShow && <AccountEdit onCancel={() => seteditShow(false)} />}
     </>
   );
 };

@@ -1,6 +1,6 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 
 const codeMessage: Record<number, string> = {
   200: '服务器成功返回请求的数据。',
@@ -51,5 +51,36 @@ const request = extend({
   errorHandler, // default error handling
   credentials: 'include', // Does the default request bring cookies
 });
+
+request.interceptors.request.use(async (url, options) => {
+  if (sessionStorage.getItem('token')) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'DSPTOKEN': sessionStorage.getItem('token'),
+    };
+    return {
+      url,
+      options: { ...options, headers },
+    };
+  }
+});
+request.interceptors.response.use(async (response, options) => {
+  const data = await response.clone().json();
+  if (data.code === 0) {
+    sessionStorage.removeItem('token')
+    sessionStorage.removeItem('CurrentUser')
+    notification.error({
+      message: `登录信息过期， code: ${data.code},${data.msg}`
+    });
+    // 界面报错处理
+  }
+  if (data.code === -1) {
+    message.warning(data.msg);
+    // 界面报错处理
+  }
+  return data;
+});
+
 
 export default request;

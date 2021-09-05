@@ -157,10 +157,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         menuDataRef.current = menuData || [];
         return menuData || [];
       }}
-      waterMarkProps={{
-        content: 'Demand-Side Platform',
-        fontColor: 'rgba(24,144,255,0.15)',
-      }}
     >
 
     </ProLayout>

@@ -8,8 +8,8 @@
  */
 export default {
   dev: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
+    '/v1/': {
+      target: 'http://ks.iambox.net:8080/',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

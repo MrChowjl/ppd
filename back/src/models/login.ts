@@ -2,14 +2,17 @@ import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { fakeAccountLogin, logout } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
 
 export type StateType = {
-  status?: 'ok' | 'error';
-  type?: string;
+  status?: {
+    username: string;
+    is_super: number
+  };
+  msg?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 };
 
@@ -40,9 +43,11 @@ const Model: LoginModelType = {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.code === 1) {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
+        sessionStorage.setItem('token', response.data.token)
+        sessionStorage.setItem('CurrentUser', JSON.stringify(response.data))
         message.success('🎉 🎉 🎉  登录成功！');
         let { redirect } = params as { redirect: string };
         if (redirect) {
@@ -65,6 +70,10 @@ const Model: LoginModelType = {
     },
 
     logout() {
+      logout().then(res => {
+        sessionStorage.removeItem('token')
+        sessionStorage.removeItem('CurrentUser')
+      })
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
@@ -83,8 +92,8 @@ const Model: LoginModelType = {
       setAuthority(payload.currentAuthority);
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        status: payload.data,
+        msg: payload.msg,
       };
     },
   },

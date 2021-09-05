@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>上传文件示例</title>
+	<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+</head>
+<body>
+<form action="" method="post"  id="edit_soft" >
+<div class="divMsgBott"><strong>上传文件：</strong></div>
+<input type="file" id="file" name="file" size="10"/>
+<input id="uploadbutton" type="button" value="上传营业执照图片路径"/>
+<input type="text" class="hthyinput" name="id" value="1">
+<input type="text" class="hthyinput" name="name" value="简称">
+<input type="text" class="hthyinput" name="company" value="公司全称">
+<input type="text" class="hthyinput" name="site_name" value="网站名称">
+<input type="text" class="hthyinput" name="site_url" value="客户网站">
+<input type="text" class="hthyinput" name="industry_id" value="1" placeholder="行业ID">
+<input type="text" class="hthyinput" name="credit_code" value="营业执照统一信用码">
+<input type="text" class="hthyinput" name="link_name" value="联系人姓名">
+<input type="text" class="hthyinput" name="link_tel" value="联系人电话">
+<input type="text" class="hthyinput" name="link_email" value="1245754@qq.com" placeholder="联系邮箱">
+</form>
+<input id="deletedata" type="button" value="删除"/>
+</body>
+</html>
+<script>
+
+	$("#uploadbutton").click(function () {
+		var formData = new FormData($('form')[0]);
+        console.log($(':file')[0].files[0]);
+		formData.append('file',$(':file')[0].files[0]); 	
+		$.ajax({			
+			url:'http://xxx.xxx.xx/v1/member/advs_edit',
+			type: 'POST',
+			headers:{'DSPTOKEN':'bd0138b2d9d44ca4e6d6ccfb5d83f4ca'},			
+			dataType: "json",
+			data:formData,			
+			//这两个设置项必填
+			contentType: false,
+			processData: false,
+			success:function(data){
+				console.log(data)
+			}
+		})
+	});	
+</script>
