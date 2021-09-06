@@ -31,13 +31,14 @@ const Page: React.FC = () => {
     deleteCurrent({ k: id.toString() }).then(res => {
       if (res.code === 1) {
         message.success(res.msg)
+        actionRef.current?.reload()
       }
     })
   }
-  enum status {
-    '待审核' = 0,
-    '通过' = 1,
-    '未通过' = -1
+  const statusMap = {
+    '0': <Tag color="orange">等待审核</Tag>,
+    '1': <Tag color="green">审核通过</Tag>,
+    '-1': <Tag color="red">审核未过</Tag>
   }
   const columns: ProColumns<GithubIssueItem>[] = [
     {
@@ -60,7 +61,7 @@ const Page: React.FC = () => {
       dataIndex: 'status',
       ellipsis: true,
       render: (value, record) => {
-        return <Tag >{status[record?.status]}</Tag>
+        return statusMap[record?.status?.toString()]
       }
     },
     {
@@ -72,11 +73,16 @@ const Page: React.FC = () => {
     {
       title: '操作',
       valueType: 'option',
+      width: 235,
       render: (text, record, _, action) => [
         <Button type="primary" onClick={() => {
           seteditShow(true)
           setselect(record?.id)
         }}>编辑</Button>,
+        <Button type="primary" onClick={() => {
+          seteditShow(true)
+          setselect(record?.id)
+        }}>资质</Button>,
         <Popconfirm title="您将要删除本条媒体？" placement="bottom" onConfirm={() => confirm(record?.id)} okText="Yes" cancelText="No">
           <Button>删除</Button>
         </Popconfirm>
@@ -113,7 +119,7 @@ const Page: React.FC = () => {
             // 不然 table 会停止解析数据，即使有数据
             success: true,
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: msg.pages.list.length * pagesize,
+            total: msg.count,
           };
         }}
         rowKey="id"

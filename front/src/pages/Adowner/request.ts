@@ -33,3 +33,9 @@ export async function deleteCurrent(params: any) {
         data: params,
     });
 }
+
+export async function getIndustry() {
+    return request('/v1/member/industry_list', {
+        method: 'GET'
+    });
+}

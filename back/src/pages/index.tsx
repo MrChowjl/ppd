@@ -26,7 +26,7 @@ export default () => {
   return (
     <PageContainer pageHeaderRender={false} title={false} breadcrumbRender={false} ghost={false}>
       <Card>
-        <ProForm<any>
+        {initParams[0]?.param_info&&<ProForm<any>
           initialValues={{
             is_register: initParams[0]?.param_value,
             add_acc_num: initParams[1]?.param_value,
@@ -70,7 +70,7 @@ export default () => {
           <ProFormSwitch name="is_register" label="开放注册" />
           <ProFormDigit label="单用户可创建广告账户数" name="add_acc_num" width="md" min={1} />
           <ProFormDigit label="单用户可创建子用户数" name="add_user_num" width="md" min={1} />
-        </ProForm>
+        </ProForm>}
       </Card>
     </PageContainer >
   );
