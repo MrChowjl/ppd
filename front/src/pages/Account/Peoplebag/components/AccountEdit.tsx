@@ -42,7 +42,7 @@ const Form: React.FC<FormParams> = (props) => {
             }}
             layout={'horizontal'}
             visible={true}
-            title={Select ? '编辑广告主' : '添加广告主'}
+            title={Select ? '编辑人群包' : '添加人群包'}
             width={600}
             modalProps={{
                 onCancel: () => onCancel()
