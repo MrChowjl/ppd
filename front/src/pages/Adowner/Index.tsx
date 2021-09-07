@@ -4,6 +4,7 @@ import { Button, Tag, Space, Menu, Popconfirm, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
+import Qualifications from './components/Qualifications'
 import { queryList, deleteCurrent } from './request'
 
 type GithubIssueItem = {
@@ -25,6 +26,7 @@ type GithubIssueItem = {
 const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
+  const [qualyShow, setqualyShow] = useState<boolean>(false)
   const [pagesize, setpagesize] = useState<number>(10)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
@@ -80,7 +82,7 @@ const Page: React.FC = () => {
           setselect(record?.id)
         }}>编辑</Button>,
         <Button type="primary" onClick={() => {
-          seteditShow(true)
+          setqualyShow(true)
           setselect(record?.id)
         }}>资质</Button>,
         <Popconfirm title="您将要删除本条媒体？" placement="bottom" onConfirm={() => confirm(record?.id)} okText="Yes" cancelText="No">
@@ -151,6 +153,7 @@ const Page: React.FC = () => {
         ]}
       />
       {editShow && <AccountEdit reload={() => actionRef.current?.reload()} Select={select} onCancel={() => seteditShow(false)} />}
+      {qualyShow && <Qualifications reload={() => actionRef.current?.reload()} Select={select} onCancel={() => setqualyShow(false)} />}
     </>
   );
 };

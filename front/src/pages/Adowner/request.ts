@@ -39,3 +39,21 @@ export async function getIndustry() {
         method: 'GET'
     });
 }
+
+export async function qualiAdd(params: any) {
+    return request('/v1/member/adv_qualification_add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        ContentType: 'multipart/form-data',
+        data: params,
+    });
+}
+
+export async function deleteQuly(params: any) {
+    return request('/v1/member/adv_qualification_del', {
+        method: 'POST',
+        data: params,
+    });
+}

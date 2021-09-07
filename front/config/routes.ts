@@ -1,7 +1,5 @@
 ﻿export default [
   {
-    path: '/',
-    component: '../layouts/BlankLayout',
     routes: [
       {
         path: '/user',
@@ -20,7 +18,7 @@
         routes: [
           {
             path: '/',
-            component: '../layouts/BasicLayout',
+            component: '../layouts/BlankLayout',
             authority: ['admin', 'user'],
             routes: [
               {
