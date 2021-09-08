@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Modal, Card, Button, message, Empty, Tag, Popconfirm, Spin } from 'antd';
+import { Modal, Card, Button, message, Empty, Tag, Popconfirm, Spin, Image } from 'antd';
 import { qualiAdd, getCurrent, deleteQuly } from './../request'
 import ProForm, {
     ModalForm,
@@ -68,13 +68,12 @@ const Form: React.FC<FormParams> = (props) => {
                                 key={itm.id}
                                 hoverable
                                 style={{ width: 240, marginBottom: 24, position: 'relative' }}
-                                cover={<div style={{
-                                    width: '100%',
-                                    height: 275,
-                                    backgroundImage: `url(${itm.file_url})`,
-                                    backgroundPosition: 'center',
-                                    backgroundSize: 'cover'
-                                }}  > </div>}
+                                cover={
+                                    <Image
+                                        height={275}
+                                        src={itm.file_url}
+                                    />
+                                }
                             >
                                 <Meta title={itm.name} description={itm.number} />
                                 <span style={{ position: 'absolute', right: 0, bottom: 5 }}>

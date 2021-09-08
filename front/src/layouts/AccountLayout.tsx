@@ -7,15 +7,12 @@ import { CloudOutlined, ProfileOutlined, DeploymentUnitOutlined, PartitionOutlin
 import styles from './BlankLayout.less';
 const Layout: React.FC = ({ children }) => {
   let path = children.props.location.pathname
-  console.log(path.length)
-  let reg = /^\/account\//
-  let isAccount = !!path.match(reg)
-  let menu:any = []
-  const menuOut = [
+
+  const menu = [
     {
-      path: '/index',
-      name: '首页',
-      icon: <CloudOutlined />,
+      name: '账户列表',
+      path: '/accountmenu/list',
+      icon: <ProfileOutlined />
     },
     {
       path: '/list',
@@ -43,34 +40,6 @@ const Layout: React.FC = ({ children }) => {
       icon: <PartitionOutlined />
     },
   ]
-  const accountMenu = [
-    {
-      name: '基本概况',
-      path: '/account/basic',
-      icon: <PartitionOutlined />
-    },
-    {
-      name: '广告计划',
-      path: '/account/adplan',
-      icon: <PartitionOutlined />
-    },
-    {
-      name: '数据报表',
-      path: '/account/datalist',
-      icon: <PartitionOutlined />
-    },
-    {
-      name: '素材库',
-      path: '/account/trend',
-      icon: <PartitionOutlined />
-    },
-    {
-      name: '人群包',
-      path: '/account/peoplebag',
-      icon: <PartitionOutlined />
-    }
-  ]
-  isAccount?menu = accountMenu:menu = menuOut
   return (
     <div>
       <div style={{ height: 50, backgroundColor: '#001529', position: 'fixed', top: 0, width: '100%', zIndex: 999,minWidth:1200  }}>

@@ -6,7 +6,7 @@ export default (): React.ReactNode => {
           textAlign: 'center',
           marginTop: 24,
         }}
-      >账户列表
+      >基本概况
       </p>
   );
 };
