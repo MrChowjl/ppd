@@ -57,12 +57,12 @@
                 icon: 'TeamOutlined',
                 component: './Adowner',
               },
-              // {
-              //   path: '/subuser',
-              //   name: '后台用户管理',
-              //   icon: 'UserOutlined',
-              //   component: './Subuser',
-              // },
+              {
+                path: '/adhostCheck',
+                name: '广告主审核',
+                icon: 'UserOutlined',
+                component: './AdhostCheck',
+              },
               // {
               //   path: '/subuser',
               //   name: '广告主审核',

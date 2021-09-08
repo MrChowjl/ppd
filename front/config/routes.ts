@@ -44,7 +44,12 @@
                 component: './Account/index',
               },
               {
+                path: '/account',
                 routes: [
+                  {
+                    path: '/account',
+                    redirect: '/account/basic',
+                  },
                   {
                     name: '基本概况',
                     path: '/account/basic',
