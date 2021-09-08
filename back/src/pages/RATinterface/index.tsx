@@ -25,7 +25,6 @@ type GithubIssueItem = {
 const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
-  const [pagesize, setpagesize] = useState<number>(10)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
     deleteCurrent({k: id.toString()}).then(res =>{
@@ -125,7 +124,7 @@ const Page: React.FC = () => {
             // 不然 table 会停止解析数据，即使有数据
             success: true,
             // 不传会使用 data 的长度，如果是分页一定要传
-            total: msg.pages.list.length * pagesize,
+            total: msg.count,
           };
         }}
         rowKey="id"
@@ -143,7 +142,7 @@ const Page: React.FC = () => {
           },
         }}
         pagination={{
-          pageSize: pagesize,
+          pageSize: 20,
         }}
         dateFormatter="string"
         headerTitle={false}
