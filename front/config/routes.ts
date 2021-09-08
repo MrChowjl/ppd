@@ -40,14 +40,11 @@
               {
                 path: '/account',
                 name: '投放账户',
-                icon: 'DeploymentUnitOutlined',
-                // component: './Account/Index',
+                icon: 'ProfileOutlined',
+                component: './Account/index',
+              },
+              {
                 routes: [
-                  {
-                    name: '账户列表',
-                    path: '/account/list',
-                    component: './Account/List',
-                  },
                   {
                     name: '基本概况',
                     path: '/account/basic',
@@ -72,7 +69,10 @@
                     name: '人群包',
                     path: '/account/peoplebag',
                     component: './Account/Peoplebag',
-                  }
+                  },
+                  {
+                    component: './404',
+                  },
                 ],
               },
               {
