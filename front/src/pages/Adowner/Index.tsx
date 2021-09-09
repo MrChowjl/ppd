@@ -77,11 +77,11 @@ const Page: React.FC = () => {
       width: 235,
       valueType: 'option',
       render: (text, record, _, action) => [
-        <Button type="primary" onClick={() => {
+        <Button type="primary" disabled={record?.status === 1 ? true : false} onClick={() => {
           seteditShow(true)
           setselect(record?.id)
         }}>编辑</Button>,
-        <Button type="primary" onClick={() => {
+        <Button type="primary" disabled={record?.status === 1 ? true : false} onClick={() => {
           setqualyShow(true)
           setselect(record?.id)
         }}>资质</Button>,

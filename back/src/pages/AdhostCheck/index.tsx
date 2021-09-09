@@ -4,6 +4,7 @@ import { Button, Tag, Space, Image, Popconfirm, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
+import QualyAudit from './components/QualyAudit'
 import { queryList, deleteCurrent } from './request'
 
 type GithubIssueItem = {
@@ -23,6 +24,7 @@ type GithubIssueItem = {
 const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
+  const [QualyAuditShow, seteQualyAuditShow] = useState<boolean>(false)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
     deleteCurrent({ k: id.toString() }).then(res => {
@@ -65,7 +67,6 @@ const Page: React.FC = () => {
       dataIndex: 'qstatus',
       hideInTable: true,
       filters: true,
-      initialValue: '0',
       valueEnum: {
         '0': { text: '待审核' },
         '1': { text: '已通过' },
@@ -182,11 +183,14 @@ const Page: React.FC = () => {
       fixed: 'right',
       valueType: 'option',
       render: (text, record, _, action) => [
-        <Button type="primary" disabled={record?.status!==0} onClick={() => {
+        <Button type="primary" disabled={record?.status !== 0} onClick={() => {
           seteditShow(true)
           setselect(record)
         }}>{status[record?.status]}</Button>,
-        <Button type="primary" >资质</Button>,
+        <Button type="primary" onClick={() => {
+          seteQualyAuditShow(true)
+          setselect(record)
+        }}>资质</Button>,
         <Popconfirm title="您将要删除本条媒体？" placement="bottom" onConfirm={() => confirm(record?.id)} okText="Yes" cancelText="No">
           <Button>删除</Button>
         </Popconfirm>
@@ -245,6 +249,7 @@ const Page: React.FC = () => {
         headerTitle={false}
       />
       {editShow && <AccountEdit reload={() => actionRef.current?.reload()} Select={select} onCancel={() => seteditShow(false)} />}
+      {QualyAuditShow && <QualyAudit reload={() => actionRef.current?.reload()} Select={select} onCancel={() => seteQualyAuditShow(false)} />}
     </>
   );
 };

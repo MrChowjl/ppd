@@ -29,3 +29,25 @@ export async function deleteCurrent(params: any) {
         data: params,
     });
 }
+
+export async function getAudit(params: any) {
+    return request('/v1/manage/adv_qualification', {
+        method: 'GET',
+        params: params,
+    });
+}
+
+
+export async function makeAudit(params: any) {
+    return request('/v1/manage/audited/adv_qualification', {
+        method: 'POST',
+        data: params,
+    });
+}
+
+export async function deleteAudit(params: any) {
+    return request('/v1/manage/delete/adv_qualification', {
+        method: 'POST',
+        data: params,
+    });
+}

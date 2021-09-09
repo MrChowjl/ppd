@@ -76,7 +76,7 @@ const Form: React.FC<FormParams> = (props) => {
                                 }
                             >
                                 <Meta title={itm.name} description={itm.number} />
-                                <span style={{ position: 'absolute', right: 0, bottom: 5 }}>
+                                <span title={itm.audited_info} style={{ position: 'absolute', right: 0, bottom: 5 }}>
                                     {statusMap[itm.status.toString()]}
                                 </span>
                                 <span className={style.delete}>
