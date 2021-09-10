@@ -41,7 +41,7 @@
                 path: '/account',
                 name: '投放账户',
                 icon: 'ProfileOutlined',
-                component: './Account/index',
+                component: './Account/List/index',
               },
               {
                 path: '/account',

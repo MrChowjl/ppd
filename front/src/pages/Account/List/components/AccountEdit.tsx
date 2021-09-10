@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, message } from 'antd';
 import ProForm, {
     ModalForm,
     ProFormText,
     ProFormDateRangePicker,
     ProFormSelect,
-    ProFormCheckbox,
+    ProFormRadio,
     ProFormDigit
 } from '@ant-design/pro-form';
+import { getOptions, addAcount } from './../request'
+import { useState } from 'react';
 
 const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -19,15 +21,52 @@ const waitTime = (time: number = 100) => {
 interface FormParams {
     onCancel: () => void;
 }
-const Form: React.FC<FormParams> = (props) => {
+const Form: React.FC<any> = (props) => {
     const { onCancel } = props
+    const [options, setoptions] = useState<{
+        Media: { value: number; label: string }[],
+        Adhost: { value: number; label: string }[],
+        Cate: { value: number; label: string }[],
+        Rta: { value: number; label: string }[],
+    }>({
+        Media: [],
+        Adhost: [
+            {value: 8, label: '允执行'},
+            {value: 5, label: '324'},
+            {value: 2, label: '43124'},
+        ],
+        Cate: [],
+        Rta: [
+            {value: 3, label: 'arqweqwe'},
+            {value: 4, label: 'sftdfg'},
+        ]
+    })
     console.log(onCancel)
-
+    useEffect(() => {
+        getOptions().then(res => {
+            if (res.code === 1) {
+                let Media = []
+                let Adhost = []
+                let Rta = []
+                let Cate = []
+                Media = res.data.adx?.map(itm=> {
+                    return {
+                        value: itm.id,
+                        label: itm.name
+                    }
+                })
+                Cate = res.data.category?.map(itm=> {
+                    return {
+                        value: itm.id,
+                        label: itm.name
+                    }
+                })
+                setoptions({...options,Media,Cate})
+            }
+        })
+    }, [])
     return (
-        <ModalForm<{
-            name: string;
-            company: string;
-        }> {...{
+        <ModalForm<any> {...{
             labelCol: { span: 6 },
             wrapperCol: { span: 14 },
         }}
@@ -39,7 +78,21 @@ const Form: React.FC<FormParams> = (props) => {
                 onCancel: () => onCancel()
             }}
             onFinish={async (values) => {
-                await waitTime(2000);
+                console.log(values)
+                
+                let obj = {
+                    name: values.name,
+                    sdate: values.contractTime[0],
+                    edate: values.contractTime[1],
+                    budgetday: values.budgetday,
+                    budgetall: values.budgetall,
+                    adx_id: values.adx_id,
+                    user_adv_id: values.user_adv_id,
+                    type: Number(values.type),
+                    rta_id: values.rta_id,
+                    aid: null
+                }
+                await addAcount(obj);
                 console.log(values.name);
                 message.success('提交成功');
                 return true;
@@ -63,12 +116,7 @@ const Form: React.FC<FormParams> = (props) => {
                 ]}
             />
             <ProFormSelect
-                options={[
-                    {
-                        value: 'chapter',
-                        label: '盖章后生效',
-                    },
-                ]}
+                options={options.Media}
                 rules={[
                     {
                         required: true,
@@ -76,17 +124,12 @@ const Form: React.FC<FormParams> = (props) => {
                     }
                 ]}
                 width="md"
-                name="Media"
+                name="adx_id"
                 placeholder="请选择媒体"
                 label="媒体"
             />
             <ProFormSelect
-                options={[
-                    {
-                        value: 'chapter',
-                        label: '盖章后生效',
-                    },
-                ]}
+                options={options.Adhost}
                 rules={[
                     {
                         required: true,
@@ -94,43 +137,25 @@ const Form: React.FC<FormParams> = (props) => {
                     }
                 ]}
                 width="md"
-                name="adhost"
+                name="user_adv_id"
                 placeholder="请选择广告主"
                 label="广告主"
             />
-            <ProFormCheckbox.Group
-                name="radio"
-                label="Radio.Group"
+             <ProFormRadio.Group
+                name="type"
+                label="广告投放类型"
                 rules={[
                     {
                         required: true,
                         message: '广告投放类型是必填项！'
                     }
                 ]}
-                options={[
-                    {
-                        label: '线索收集',
-                        value: 0,
-                    },
-                    {
-                        label: 'APP拉活',
-                        value: 1,
-                    },
-                    {
-                        label: 'APP拉新',
-                        value: 2,
-                    },
-                ]}
+                options={options.Cate}
             />
             <ProFormSelect
-                options={[
-                    {
-                        value: 'chapter',
-                        label: '盖章后生效',
-                    },
-                ]}
+                options={options.Rta}
                 width="md"
-                name="adhost"
+                name="rta_id"
                 placeholder="请选择要绑定的绑定RTA"
                 label="绑定RTA"
             />
@@ -142,14 +167,14 @@ const Form: React.FC<FormParams> = (props) => {
                         required: true,
                         message: '广告投放总预算是必填项！'
                     }
-                ]} name="number" width="md" min={1} />
+                ]} name="budgetall" width="md" min={1} />
             <ProFormDigit label="广告投放每日预算"
                 rules={[
                     {
                         required: true,
                         message: '广告投放每日预算是必填项！'
                     }
-                ]} name="input-number" width="md" min={1} />
+                ]} name="budgetday" width="md" min={1} />
         </ModalForm>
     );
 };

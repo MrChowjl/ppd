@@ -6,7 +6,7 @@ export default (): React.ReactNode => {
           textAlign: 'center',
           marginTop: 24,
         }}
-      >数据报表
+      >项目
       </p>
   );
 };

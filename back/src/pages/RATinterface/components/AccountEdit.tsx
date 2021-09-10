@@ -46,16 +46,16 @@ const Form: React.FC<FormParams> = (props) => {
             }}
             layout={'horizontal'}
             visible={true}
-            title={Select?'编辑RTA接口':'添加RTA接口'}
+            title={Select ? '编辑RTA接口' : '添加RTA接口'}
             width={600}
             modalProps={{
                 onCancel: () => onCancel()
             }}
             onFinish={async (values) => {
-                console.log(values)
                 let params = {
-                    is_actived: Number(values.is_actived),
+                    is_actived: values.is_actived ? 1 : 0,
                     id: Select ? Select : null,
+                    adv_id: Number(values?.adv_id)
                 }
                 let res = await mediaEdit({ ...values, ...params });
                 if (res.code === 1) {
@@ -92,6 +92,14 @@ const Form: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: '接口地址是必填项！'
+                    },
+                    {
+                        max: 100,
+                        message: '接口地址最多100个字！'
+                    },
+                    {
+                        pattern: /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/,
+                        message: '请输入正确的url地址（以http://或https://开头）'
                     }
                 ]}
             />
