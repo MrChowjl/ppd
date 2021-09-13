@@ -55,8 +55,6 @@ const request = extend({
 request.interceptors.request.use(async (url, options) => {
   if (sessionStorage.getItem('token')) {
     const headers = {
-      // 'Content-Type': 'application/json',
-      // 'Accept': 'application/json',
       'FRONTTOKEN': sessionStorage.getItem('token'),
     };
     return {
