@@ -105,7 +105,7 @@ const Form: React.FC<any> = (props) => {
             }}
                 layout={'horizontal'}
                 visible={true}
-                title="创建投放账户"
+                title={currentSelected ? '编辑投放账户' : '创建投放账户'}
                 width={600}
                 modalProps={{
                     onCancel: () => onCancel()
