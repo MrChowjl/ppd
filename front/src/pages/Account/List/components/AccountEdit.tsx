@@ -81,7 +81,6 @@ const Form: React.FC<any> = (props) => {
         })
     }, [])
     useEffect(() => {
-
         if (currentItem) {
             getRTA(currentItem?.adv_id as string).then(res => {
                 console.log(options)

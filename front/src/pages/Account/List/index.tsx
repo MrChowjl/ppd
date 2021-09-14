@@ -4,7 +4,7 @@ import { Button, Tag, Space, Popconfirm, Menu, Switch, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
-import { getOptions, queryList, acountDelete } from './request'
+import { getOptions, queryList, acountDelete, switchAccount } from './request'
 import { history } from 'umi';
 
 type Item = {
@@ -129,14 +129,26 @@ const Page: React.FC = () => {
       dataIndex: 'status',
       hideInSearch: true,
       ellipsis: true,
-      render: () => {
-        return <Switch defaultChecked={status === '运行中' ? true : false} onChange={() => { }} />
+      render: (r, re) => {
+        return (
+          <Switch checked={status === '运行中' ? true : false} onChange={() => {
+            switchAccount(
+              { aid: re.id }
+            ).then(res => {
+              if (res.code === 1) {
+                message.success(res.msg)
+              }
+              actionRef.current?.reload()
+            })
+          }} />
+        )
       }
     },
     {
       title: '状态',
       dataIndex: 'status',
       hideInSearch: true,
+      width: 120,
       filters: true,
       render: (en, re) => {
         return <Tag>{re.status}</Tag>
@@ -202,10 +214,10 @@ const Page: React.FC = () => {
       valueType: 'option',
       width: 235,
       render: (text, record, _, action) => [
-        <Button type="primary" onClick={() => {
+        <Button type="primary" disabled={record?.status === '待媒体审核' || record?.status === '开启中' ? false : true} onClick={() => {
           history.push(`/account/basic?id=${record.id}`)
         }}>投放</Button>,
-        <Button type="primary" onClick={() => {
+        <Button type="primary" disabled={record?.status === '待系统审核' ? false : true} onClick={() => {
           seteditShow(true)
           setcurrentSelected(record)
         }}>编辑</Button>,
@@ -279,7 +291,7 @@ const Page: React.FC = () => {
           },
         }}
         pagination={{
-          pageSize: 5,
+          pageSize: 10,
         }}
         dateFormatter="string"
         headerTitle={false}

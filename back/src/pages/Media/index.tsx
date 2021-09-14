@@ -27,7 +27,7 @@ const Page: React.FC = () => {
   const [editShow, seteditShow] = useState<boolean>(false)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
-    deleteCurrent({k: id.toString()}).then(res =>{
+    deleteCurrent({ k: id.toString() }).then(res => {
       if (res.code === 1) {
         message.success(res.msg)
       }
@@ -49,13 +49,11 @@ const Page: React.FC = () => {
       dataIndex: 'is_actived',
       ellipsis: true,
       render: (value, ecord) => {
-        console.log(value);
-        
-          if(ecord?.is_actived === 1) {
-            return <Tag color="#108ee9">启用</Tag>
-          } else {
-            return <Tag >关闭</Tag>
-          }
+        if (ecord?.is_actived === 1) {
+          return <Tag color="#108ee9">启用</Tag>
+        } else {
+          return <Tag >关闭</Tag>
+        }
       }
     },
     {
@@ -72,7 +70,7 @@ const Page: React.FC = () => {
     {
       title: '操作',
       valueType: 'option',
-      width:155,
+      width: 155,
       render: (text, record, _, action) => [
         <Button type="primary" onClick={() => {
           seteditShow(true)

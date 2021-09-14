@@ -39,3 +39,10 @@ export async function acountDelete(params: any) {
         data: params,
     });
 }
+
+export async function switchAccount(params: any) {
+    return request('v1/ad_account_open_close', {
+        method: 'POST',
+        data: params,
+    });
+}

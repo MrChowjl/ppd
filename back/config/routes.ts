@@ -63,6 +63,12 @@
                 icon: 'UserOutlined',
                 component: './AdhostCheck',
               },
+              {
+                path: '/acountCheck',
+                name: '广告账户审核',
+                icon: 'PicRightOutlined',
+                component: './AcountCheck',
+              },
               // {
               //   path: '/subuser',
               //   name: '广告主审核',

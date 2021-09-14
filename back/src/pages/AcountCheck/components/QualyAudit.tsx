@@ -2,6 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Divider, message, Image, Modal, Button, Popconfirm, Tag, Radio, Input, Space } from 'antd';
 const { TextArea } = Input;
 import { makeAudit, getAudit, deleteAudit } from './../request'
+import ProForm, {
+    ModalForm,
+    ProFormText,
+    ProFormSwitch,
+    ProFormTextArea,
+    ProFormCheckbox,
+    ProFormDigit,
+    ProFormSelect
+} from '@ant-design/pro-form';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 type GithubIssueItem = {

@@ -27,7 +27,6 @@ const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
   const [qualyShow, setqualyShow] = useState<boolean>(false)
-  const [pagesize, setpagesize] = useState<number>(10)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
     deleteCurrent({ k: id.toString() }).then(res => {
@@ -138,7 +137,7 @@ const Page: React.FC = () => {
           },
         }}
         pagination={{
-          pageSize: pagesize,
+          pageSize: 10,
         }}
         dateFormatter="string"
         headerTitle={false}
