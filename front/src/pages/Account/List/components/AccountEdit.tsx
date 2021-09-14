@@ -112,7 +112,7 @@ const Form: React.FC<any> = (props) => {
                 }}
                 initialValues={{
                     name: currentItem?.name,
-                    contractTime: [currentItem && moment(currentItem.sdate * 1000).format('yyyy-MM-DD'), moment(currentItem && currentItem.edate * 1000).format('yyyy-MM-DD')],
+                    contractTime: currentItem ? [currentItem && moment(currentItem.sdate * 1000).format('yyyy-MM-DD'), moment(currentItem && currentItem.edate * 1000).format('yyyy-MM-DD')] : null,
                     budgetday: Number(currentItem?.budget_day),
                     budgetall: Number(currentItem?.budget_all),
                     adx_id: currentItem?.adx_id,
