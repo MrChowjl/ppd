@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Popconfirm, Menu, Switch, message } from 'antd';
+import { Button, Tag, Space, Popconfirm, Badge, Switch, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
@@ -39,6 +39,17 @@ const Page: React.FC = () => {
     Cate: [],
     Status: []
   })
+  enum status {
+    '待系统审核' = 'processing',
+    '待媒体审核' = 'processing',
+    '系统审核通过' = 'default',
+    '媒体审核通过' = 'default',
+    '系统审核失败' = 'error',
+    '媒体审核失败' = 'error',
+    '开启中' = 'success',
+    '关闭中' = 'default',
+    '已删除' = 'error'
+  }
   useEffect(() => {
     getOptions().then(res => {
       if (res.code === 1) {
@@ -131,14 +142,14 @@ const Page: React.FC = () => {
       ellipsis: true,
       render: (r, re) => {
         return (
-          <Switch checked={status === '运行中' ? true : false} onChange={() => {
+          <Switch checked={re.status === '开启中' ? true : false} onChange={() => {
             switchAccount(
               { aid: re.id }
             ).then(res => {
               if (res.code === 1) {
                 message.success(res.msg)
+                actionRef.current?.reload()
               }
-              actionRef.current?.reload()
             })
           }} />
         )
@@ -150,9 +161,9 @@ const Page: React.FC = () => {
       hideInSearch: true,
       width: 120,
       filters: true,
-      render: (en, re) => {
-        return <Tag>{re.status}</Tag>
-      }
+      render: (_, item) => {
+        return <Badge status={status[item.status]} text={item.status} />;
+      },
     },
     {
       dataIndex: 'adv_name',
@@ -217,7 +228,7 @@ const Page: React.FC = () => {
         <Button type="primary" disabled={record?.status === '开启中' ? false : true} onClick={() => {
           history.push(`/account/basic?id=${record.id}`)
         }}>投放</Button>,
-        <Button type="primary" disabled={record?.status === '待系统审核' || record?.status === '系统审核未通过' ? false : true} onClick={() => {
+        <Button type="primary" disabled={record?.status === '待系统审核' || record?.status === '系统审核失败' ? false : true} onClick={() => {
           seteditShow(true)
           setcurrentSelected(record)
         }}>编辑</Button>,

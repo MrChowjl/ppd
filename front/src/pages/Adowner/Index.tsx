@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Menu, Popconfirm, message } from 'antd';
+import { Button, Tag, Space, Badge, Popconfirm, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
@@ -16,6 +16,7 @@ type GithubIssueItem = {
     name: string;
     color: string;
   }[];
+  status: number;
   state: string;
   comments: number;
   created_at: string;
@@ -36,10 +37,15 @@ const Page: React.FC = () => {
       }
     })
   }
+  const statusTextMap = {
+    '0': '等待审核',
+    '1': '审核通过',
+    '-1': '审核未过'
+  }
   const statusMap = {
-    '0': <Tag color="orange">等待审核</Tag>,
-    '1': <Tag color="green">审核通过</Tag>,
-    '-1': <Tag color="red">审核未过</Tag>
+    '0': 'processing',
+    '1': 'success',
+    '-1': 'error',
   }
   const columns: ProColumns<GithubIssueItem>[] = [
     {
@@ -61,9 +67,9 @@ const Page: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       ellipsis: true,
-      render: (value, record) => {
-        return statusMap[record?.status?.toString()]
-      }
+      render: (_, item) => {
+        return <Badge status={statusMap[item?.status.toString()]} text={statusTextMap[item?.status.toString()]} />;
+      },
     },
     {
       title: '添加时间',
