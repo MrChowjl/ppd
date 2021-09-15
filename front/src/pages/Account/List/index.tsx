@@ -48,7 +48,7 @@ const Page: React.FC = () => {
     '媒体审核失败' = 'error',
     '开启中' = 'success',
     '关闭中' = 'default',
-    '已删除' = 'error'
+    '已删除' = 'default'
   }
   useEffect(() => {
     getOptions().then(res => {

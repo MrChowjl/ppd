@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
-import { Button, Tag, Space, Image, Popconfirm, message, Switch, Radio, Input } from 'antd';
+import { Button, Tag, Space, Image, Popconfirm, message, Switch, Radio, Input, Badge } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
@@ -36,13 +36,22 @@ const Page: React.FC = () => {
     })
   }
   enum status {
-    '待审核' = 0,
+    '待系统审核' = 0,
     '系统审核通过' = 1,
     '媒体审核通过' = 2,
-    '系统审核未通过' = -1,
-    '媒体审核未通过' = -2,
+    '系统审核失败' = -1,
+    '媒体审核失败' = -2,
     '开启中' = 3,
     '已删除' = -9
+  }
+  const statusMap = {
+    '0': 'processing',
+    '1': 'processing',
+    '2': 'processing',
+    '-1': 'error',
+    '-2': 'error',
+    '3': 'success',
+    '-9': 'default',
   }
   const columns: ProColumns<GithubIssueItem>[] = [
     {
@@ -98,8 +107,8 @@ const Page: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       ellipsis: true,
-      render: (value, record) => {
-        return <Tag >{status[record?.status]}</Tag>
+      render: (_, item) => {
+        return <Badge status={statusMap[item.status]} text={status[item.status]} />;
       },
       width: 80,
       hideInSearch: true,

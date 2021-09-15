@@ -7,11 +7,11 @@ import { CloudOutlined, ProfileOutlined, DeploymentUnitOutlined, PartitionOutlin
 import styles from './BlankLayout.less';
 const Layout: React.FC = ({ children }) => {
   let path = children.props.location.pathname
-  console.log(path.length)
+  console.log(children.props)
   let reg = /^\/account\//
   let isAccount = !!path.match(reg)
-  let menu:any = []
-  const menuOut = [
+  let menu: any = []
+  let menuOut = [
     {
       path: '/index',
       name: '首页',
@@ -43,7 +43,7 @@ const Layout: React.FC = ({ children }) => {
       icon: <PartitionOutlined />
     },
   ]
-  const accountMenu = [
+  let accountMenu = [
     {
       name: '基本概况',
       path: '/account/basic',
@@ -70,10 +70,16 @@ const Layout: React.FC = ({ children }) => {
       icon: <PartitionOutlined />
     }
   ]
-  isAccount?menu = accountMenu:menu = menuOut
+  let ar = [...menuOut, ...accountMenu]
+  ar.forEach(itm => {
+    if (itm.path === path) {
+      document.title = itm.name + ' - Demand-Side Platform'
+    }
+  })
+  isAccount ? menu = accountMenu : menu = menuOut
   return (
     <div>
-      <div style={{ height: 50, backgroundColor: '#001529', position: 'fixed', top: 0, width: '100%', zIndex: 999,minWidth:1200  }}>
+      <div style={{ height: 50, backgroundColor: '#001529', position: 'fixed', top: 0, width: '100%', zIndex: 999, minWidth: 1200 }}>
         <div style={{
           display: 'inline-block',
           color: '#fff',
@@ -85,11 +91,11 @@ const Layout: React.FC = ({ children }) => {
           <img style={{ maxWidth: 30, marginRight: 15 }} src={logo} alt="" />
           <div style={{ display: 'inline-block' }}>Demand-Side Platform</div>
         </div>
-        <div style={{ display: 'inline-block', color: '#fff', lineHeight: '50px', height: '100%'}}>
+        <div style={{ display: 'inline-block', color: '#fff', lineHeight: '50px', height: '100%' }}>
           {
             menu.map(itm => {
               return (
-                <span style={{
+                <span key={itm.path} style={{
                   backgroundColor: path === itm.path ? '#1890ff' : ''
                 }} className={styles.item}>
                   <Link style={{ color: '#fff', display: 'inline-block', padding: '0 20px', fontSize: 15 }} to={itm.path}> <span style={{ marginRight: 5 }}>{itm.icon}</span> {itm.name}</Link>
