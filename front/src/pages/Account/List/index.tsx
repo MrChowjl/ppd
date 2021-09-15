@@ -214,10 +214,10 @@ const Page: React.FC = () => {
       valueType: 'option',
       width: 235,
       render: (text, record, _, action) => [
-        <Button type="primary" disabled={record?.status === '待媒体审核' || record?.status === '开启中' ? false : true} onClick={() => {
+        <Button type="primary" disabled={record?.status === '开启中' ? false : true} onClick={() => {
           history.push(`/account/basic?id=${record.id}`)
         }}>投放</Button>,
-        <Button type="primary" disabled={record?.status === '待系统审核' ? false : true} onClick={() => {
+        <Button type="primary" disabled={record?.status === '待系统审核' || record?.status === '系统审核未通过' ? false : true} onClick={() => {
           seteditShow(true)
           setcurrentSelected(record)
         }}>编辑</Button>,
