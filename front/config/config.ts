@@ -19,7 +19,7 @@ export default defineConfig({
     // default zh-CN
     default: 'zh-CN',
     antd: true,
-    baseNavigator: true,
+    baseNavigator: true
   },
   dynamicImport: {
     loading: '@/components/PageLoading/index',

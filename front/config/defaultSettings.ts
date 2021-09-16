@@ -17,7 +17,6 @@ const proSettings: DefaultSettings = {
   pwa: false,
   iconfontUrl: '',
   menu: {
-
     locale: true,  //关闭国际化
   },
 };
