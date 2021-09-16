@@ -289,9 +289,9 @@ const Page: React.FC = () => {
         pagination={{
           pageSize: 10,
         }}
-        // search={{
-        //   filterType: 'light'
-        // }}
+        search={{
+          // filterType: 'light'
+        }}
         headerTitle={false}
         dateFormatter="string"
         toolBarRender={() => [
