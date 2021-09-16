@@ -47,7 +47,7 @@ const Page: React.FC = () => {
     '系统审核失败' = 'error',
     '媒体审核失败' = 'error',
     '开启中' = 'success',
-    '关闭中' = 'default',
+    '已关闭' = 'default',
     '已删除' = 'default'
   }
   useEffect(() => {
@@ -101,7 +101,7 @@ const Page: React.FC = () => {
       valueEnum: options.Media,
     },
     {
-      title: '所有投放类型',
+      title: '投放类型',
       hideInTable: true,
       valueType: 'select',
       name: 'type',
@@ -286,25 +286,9 @@ const Page: React.FC = () => {
           type: 'multiple',
         }}
         rowKey="id"
-        search={{
-          labelWidth: 'auto',
-        }}
-        form={{
-          // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-          syncToUrl: (values, type) => {
-            if (type === 'get') {
-              return {
-                ...values,
-                created_at: [values.startTime, values.endTime],
-              };
-            }
-            return values;
-          },
-        }}
         pagination={{
           pageSize: 10,
         }}
-        dateFormatter="string"
         headerTitle={false}
         toolBarRender={() => [
           <Button key="button" icon={<PlusOutlined />} onClick={() => {
