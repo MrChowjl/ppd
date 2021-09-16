@@ -248,7 +248,7 @@ const Page: React.FC = () => {
   ];
   return (
     <>
-      <ProTable<Item>
+      <ProTable
         columns={columns}
         actionRef={actionRef}
         request={async (
@@ -289,7 +289,11 @@ const Page: React.FC = () => {
         pagination={{
           pageSize: 10,
         }}
+        // search={{
+        //   filterType: 'light'
+        // }}
         headerTitle={false}
+        dateFormatter="string"
         toolBarRender={() => [
           <Button key="button" icon={<PlusOutlined />} onClick={() => {
             seteditShow(true)
