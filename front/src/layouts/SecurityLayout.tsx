@@ -24,11 +24,13 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     this.setState({
       isReady: true,
     });
-    const { dispatch } = this.props;
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
+    if (sessionStorage.getItem('token')) {
+      const { dispatch } = this.props;
+      if (dispatch) {
+        dispatch({
+          type: 'user/fetchCurrent',
+        });
+      }
     }
   }
 
@@ -42,7 +44,7 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     const isLogin = currentUser
     const { email } = currentUser
     console.log(email)
-    
+
     const queryString = stringify({
       redirect: window.location.href,
     });
