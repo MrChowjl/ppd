@@ -98,6 +98,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     <ProLayout
       {...props}
       {...settings}
+      // pure={true}
       layout='top'
       menuHeaderRender={() => {
         return (
