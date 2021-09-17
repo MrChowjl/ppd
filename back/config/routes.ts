@@ -69,6 +69,12 @@
                 icon: 'PicRightOutlined',
                 component: './AcountCheck',
               },
+              {
+                path: '/planCheck',
+                name: '计划审核',
+                icon: 'BorderHorizontalOutlined',
+                component: './PlanCheck',
+              },
               // {
               //   path: '/subuser',
               //   name: '广告主审核',

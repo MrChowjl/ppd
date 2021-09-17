@@ -9,7 +9,6 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { ConfigProvider } from 'antd';
 const Layout: React.FC = ({ children }) => {
   let path = children.props.location.pathname
-  console.log(children.props)
   let reg = /^\/account\//
   let isAccount = !!path.match(reg)
   let menu: any = []
@@ -101,7 +100,7 @@ const Layout: React.FC = ({ children }) => {
                   <span key={itm.path} style={{
                     backgroundColor: path === itm.path ? '#1890ff' : ''
                   }} className={styles.item}>
-                    <Link style={{ color: '#fff', display: 'inline-block', padding: '0 20px', fontSize: 15 }} to={itm.path}> <span style={{ marginRight: 5 }}>{itm.icon}</span> {itm.name}</Link>
+                    <Link style={{ color: '#fff', display: 'inline-block', padding: '0 20px', fontSize: 15 }} to={`${itm.path}${menu = accountMenu ? location.search : ''}`}> <span style={{ marginRight: 5 }}>{itm.icon}</span> {itm.name}</Link>
                   </span>
                 )
               })
