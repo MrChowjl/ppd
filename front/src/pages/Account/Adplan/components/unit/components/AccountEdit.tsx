@@ -33,7 +33,9 @@ const Form: React.FC<FormParams> = (props) => {
         os?: any[],
         region?: any[],
         gender?: any[],
-        network?: any[]
+        network?: any[],
+        passed_crowd?: any[],
+        denied_crowd?: any[],
     }>({
         ad_type: [
             { label: '信息流列表页', value: 1 },
@@ -58,7 +60,9 @@ const Form: React.FC<FormParams> = (props) => {
             { label: '3G', value: 3 },
             { label: '4G', value: 4 },
             { label: '5G', value: 5 },
-        ]
+        ],
+        passed_crowd: ['A包', 'B包', 'C包'],
+        denied_crowd: ['D包', 'E包', 'F包']
     })
     useEffect(() => {
         Select && getCurrent(Select).then(res => {
@@ -89,7 +93,8 @@ const Form: React.FC<FormParams> = (props) => {
             layout={'horizontal'}
             visible={true}
             title={Select ? '编辑单元' : '添加单元'}
-            width={700}
+            width={600}
+            style={{ maxHeight: 500 }}
             modalProps={{
                 onCancel: () => onCancel()
             }}
@@ -114,53 +119,6 @@ const Form: React.FC<FormParams> = (props) => {
         >
             <ProFormSelect
                 width="md"
-                name="plan_id"
-                label="选择计划"
-                valueEnum={option?.plan}
-                rules={[
-                    {
-                        required: true,
-                        message: '选择计划是必填项！'
-                    }
-                ]}
-            />
-            <ProFormText
-                width="md"
-                name="title"
-                label="单元标题"
-                placeholder="请输入"
-                rules={[
-                    {
-                        required: true,
-                        message: '单元标题是必填项！'
-                    }
-                ]}
-            />
-            <ProFormRadio.Group
-                label="广告投放类型"
-                name='ad_type'
-                rules={[
-                    {
-                        required: true,
-                        message: '广告投放类型是必填项！'
-                    }
-                ]}
-                options={option?.ad_type}
-            />
-            <ProFormSelect
-                width="md"
-                name="passed_app"
-                label="指定app"
-                valueEnum={option?.plan}
-            />
-            <ProFormSelect
-                width="md"
-                name="denied_app"
-                label="排除app"
-                valueEnum={option?.plan}
-            />
-            <ProFormSelect
-                width="md"
                 name="region"
                 label="地域"
                 mode='multiple'
@@ -168,7 +126,7 @@ const Form: React.FC<FormParams> = (props) => {
                 rules={[
                     {
                         required: true,
-                        message: '选择计划是必填项！'
+                        message: '地域是必填项！'
                     }
                 ]}
             />
@@ -183,6 +141,141 @@ const Form: React.FC<FormParams> = (props) => {
                 name="network"
                 label="网络"
                 options={option?.network}
+            />
+            <ProFormSelect
+                width="md"
+                name="passed_crowd"
+                label="投放人群包"
+                mode='multiple'
+                options={option?.passed_crowd}
+                rules={[
+                    {
+                        required: true,
+                        message: '投放人群包是必填项！'
+                    }
+                ]}
+            />
+            <ProFormSelect
+                width="md"
+                name="denied_crowd"
+                label="排除人群包"
+                mode='multiple'
+                options={option?.denied_crowd}
+                rules={[
+                    {
+                        required: true,
+                        message: '投放人群包是必填项！'
+                    }
+                ]}
+            />
+            <ProFormUploadButton
+                name="app_logo"
+                label="APP logo"
+                max={1}
+                fieldProps={{
+                    name: 'app_logo',
+                    listType: 'picture-card'
+                }}
+                rules={[
+                    {
+                        required: true,
+                        message: 'APP logo是必传项！'
+                    }
+                ]}
+                action={''}
+                extra="请上传小于4M的png/jpg格式的图片"
+            />
+            <ProFormText
+                width="md"
+                name="app_name"
+                label="APP名称"
+                placeholder="请输入"
+                rules={[
+                    {
+                        required: true,
+                        message: 'APP名称是必填项！'
+                    }
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="app_name"
+                label="APP包名"
+                placeholder="请输入"
+                rules={[
+                    {
+                        required: true,
+                        message: 'APP包名是必填项！'
+                    }
+                ]}
+            />
+            <ProFormSelect
+                width="md"
+                name="denied_crowd"
+                label="行动感召"
+                mode='multiple'
+                options={[
+                    { label: '立即下载', value: 1 },
+                    { label: '打开应用', value: 2 }
+                ]}
+                rules={[
+                    {
+                        required: true,
+                        message: '行动感召是必填项！'
+                    }
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="page_addr"
+                label="落地页地址"
+                placeholder="请输入"
+                rules={[
+                    {
+                        required: true,
+                        message: '落地页地址是必填项！'
+                    }
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="apply_addr"
+                label="应用直达链接"
+                placeholder="请输入"
+                rules={[
+                    {
+                        required: true,
+                        message: '应用直达链接是必填项！'
+                    }
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="show_addr"
+                label="曝光监测"
+                placeholder="请输入"
+                rules={[
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="click_addr"
+                label="点击监测"
+                placeholder="请输入"
+                rules={[
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="app_down_addr"
+                label="APP下载地址"
+                placeholder="请输入"
+                rules={[
+                    {
+                        required: true,
+                        message: 'APP下载地址是必填项！'
+                    }
+                ]}
             />
             <ProFormRadio.Group
                 label="广告投放类型"
