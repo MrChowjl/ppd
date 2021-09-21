@@ -7,7 +7,7 @@ import Unit from './components/unit'
 import Create from './components/create'
 export default (): React.ReactNode => {
   return (
-    <Tabs defaultActiveKey="2" >
+    <Tabs defaultActiveKey="2" destroyInactiveTabPane={true}>
       <TabPane tab="广告计划" key="1">
         <Plan />
       </TabPane>

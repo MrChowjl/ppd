@@ -4,17 +4,20 @@ let id = location.search.charAt(location.search.length - 1)
 
 export async function mediaEdit(params: any) {
     params.append('ad_acc_id', id)
-    return request('/v1/member/crowds_edit', {
+    return request('/v1/member/materials_edit', {
         method: 'POST',
         data: params,
     });
 }
 
 export async function queryList(params: any) {
-    params.append('acc_id', id)
-    return request('/v1/member/crowds_list', {
-        method: 'POST',
-        data: params,
+    return request('/v1/member/materials_list', {
+        method: 'GET',
+        params: {
+            acc_id: id,
+            type: 1,
+            ...params
+        },
     });
 }
 

@@ -67,7 +67,7 @@ const Page: React.FC = (props) => {
       title: '封面/图片',
       dataIndex: 'thumbnail',
       hideInSearch: true,
-      width: 120,
+      width: 135,
       filters: true,
       render: (_, item) => {
         return (<Image
@@ -77,9 +77,10 @@ const Page: React.FC = (props) => {
       },
     },
     {
-      title: '人群包名称',
+      title: '素材名称',
       dataIndex: 'title',
       ellipsis: true,
+      hideInSearch: true,
     },
     {
       title: '素材地址',
@@ -90,12 +91,6 @@ const Page: React.FC = (props) => {
     {
       title: '素材大小(b)',
       dataIndex: 'filesize',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '视频时长(s)',
-      dataIndex: 'duration',
       ellipsis: true,
       hideInSearch: true,
     },
@@ -156,7 +151,7 @@ const Page: React.FC = (props) => {
           const msg = await queryList({
             page: params.current,
             limit: params.pageSize,
-            title: params.title
+            keywords: params.keywords
           });
           return {
             data: msg.data,
@@ -176,7 +171,7 @@ const Page: React.FC = (props) => {
             seteditShow(true)
             setselect('')
           }} type="primary">
-            上传人群包
+            上传图片
           </Button>
         ]}
       />

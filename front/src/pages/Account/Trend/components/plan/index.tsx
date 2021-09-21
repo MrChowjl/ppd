@@ -77,9 +77,10 @@ const Page: React.FC = (props) => {
       },
     },
     {
-      title: '人群包名称',
+      title: '素材名称',
       dataIndex: 'title',
       ellipsis: true,
+      hideInSearch: true,
     },
     {
       title: '素材地址',
@@ -156,7 +157,7 @@ const Page: React.FC = (props) => {
           const msg = await queryList({
             page: params.current,
             limit: params.pageSize,
-            title: params.title
+            keywords: params.keywords
           });
           return {
             data: msg.data,
@@ -176,7 +177,7 @@ const Page: React.FC = (props) => {
             seteditShow(true)
             setselect('')
           }} type="primary">
-            上传人群包
+            上传视频
           </Button>
         ]}
       />

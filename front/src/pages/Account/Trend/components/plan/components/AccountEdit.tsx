@@ -20,7 +20,7 @@ const Form: React.FC<FormParams> = (props) => {
     const [current, setcurrent] = useState<{
         title: string;
         url: string;
-        device_type: number;
+        thumbnail: string;
     }>()
     useEffect(() => {
         let form = new FormData()
@@ -38,11 +38,10 @@ const Form: React.FC<FormParams> = (props) => {
         }}
             initialValues={{
                 title: current?.title,
-                device_type: current?.device_type
             }}
             layout={'horizontal'}
             visible={true}
-            title={Select ? '编辑人群包' : '编辑人群包'}
+            title={Select ? '编辑视频' : '添加视频'}
             width={600}
             modalProps={{
                 onCancel: () => onCancel()
@@ -50,7 +49,7 @@ const Form: React.FC<FormParams> = (props) => {
             onFinish={async (values) => {
                 let form = new FormData()
                 form.append('title', values.title)
-                form.append('device_type', values.device_type)
+                form.append('category', '1')
                 form.append('file', values.file ? values.file[0].originFileObj : current?.url)
                 form.append('id', Select || '')
                 let res = await mediaEdit(form);
@@ -65,36 +64,22 @@ const Form: React.FC<FormParams> = (props) => {
             <ProFormText
                 width="md"
                 name="title"
-                label="人群包标题"
+                label="视频标题"
                 placeholder="请输入"
                 rules={[
                     {
                         required: true,
-                        message: '人群包标题是必填项！'
+                        message: '视频标题是必填项！'
                     }
                 ]}
             />
-            <ProFormSelect
-                width="md"
-                name="device_type"
-                label="匹配设备类型"
-                options={[
-                    { label: 'RTA不限制', value: 0 },
-                    { label: 'IMEI', value: 1 },
-                    { label: 'ANDROIDID', value: 2 },
-                    { label: 'OAID', value: 3 },
-                    { label: 'IDFA', value: 4 },
-                ]}
-                rules={[
-                    {
-                        required: true,
-                        message: '人群包标题是必填项！'
-                    }
-                ]}
-            />
-            <ProFormUploadButton
+            {Select ? <div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <video src={current?.url} controls></video>
+                </div>
+            </div> : <ProFormUploadButton
                 name="file"
-                label="人群包"
+                label="视频文件"
                 max={1}
                 fieldProps={{
                     name: 'file',
@@ -103,12 +88,12 @@ const Form: React.FC<FormParams> = (props) => {
                 rules={[
                     {
                         required: true,
-                        message: '人群包是必传项！'
+                        message: '视频文件是必传项！'
                     }
                 ]}
                 action={''}
-                extra="请上传小于4M的png/jpg格式的图片"
-            />
+                extra="请上传avi/mp4/flv格式的文件"
+            />}
         </ModalForm > : null
     );
 };
