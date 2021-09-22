@@ -11,16 +11,18 @@ export async function mediaEdit(params: any) {
 }
 
 export async function queryList(params: any) {
-    params.append('acc_id', id)
     return request('/v1/member/crowds_list', {
-        method: 'POST',
-        data: params,
+        method: 'GET',
+        params: {
+            acc_id: id,
+            ...params
+        },
     });
 }
 
 export async function getCurrent(params: any) {
-    // params.append('acc_id', 'id')
-    return request(`/v1/member/materials_one`, {
+    // params.append('acc_id', id)
+    return request(`/v1/member/crowds_one`, {
         method: 'GET',
         params: {
             acc_id: id,

@@ -21,13 +21,12 @@ type GithubIssueItem = {
   updated_at: string;
   closed_at?: string;
   is_active?: number;
-  thumbnail?: string;
+  category?: number;
 };
 
 const Page: React.FC = (props) => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
-  const [pagesize, setpagesize] = useState<number>(10)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
     deleteCurrent({
@@ -64,54 +63,43 @@ const Page: React.FC = (props) => {
       hideInSearch: true
     },
     {
-      title: '封面/图片',
-      dataIndex: 'thumbnail',
-      hideInSearch: true,
-      width: 120,
-      filters: true,
-      render: (_, item) => {
-        return (<Image
-          width={120}
-          src={item.thumbnail}
-        />);
-      },
-    },
-    {
-      title: '人群包名称',
+      title: '人群包标题',
       dataIndex: 'title',
       ellipsis: true,
     },
     {
-      title: '素材地址',
+      title: '类型',
+      dataIndex: 'category',
+      ellipsis: true,
+      render: (_, re) => {
+        return re.category === 0 ? '手动上传' : 'RTA'
+      },
+      hideInSearch: true
+    },
+    {
+      title: '文件/RTA路径',
       dataIndex: 'url',
       ellipsis: true,
       hideInSearch: true,
     },
     {
-      title: '素材大小(b)',
+      title: '匹配设备类型',
+      dataIndex: 'device_type',
+      ellipsis: true,
+      hideInSearch: true,
+    },
+    {
+      title: '文件大小(s)',
       dataIndex: 'filesize',
       ellipsis: true,
       hideInSearch: true,
     },
     {
-      title: '视频时长(s)',
-      dataIndex: 'duration',
+      title: '设备数',
+      dataIndex: 'device_num',
       ellipsis: true,
       hideInSearch: true,
     },
-    {
-      title: '素材宽度',
-      dataIndex: 'width',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '素材高度',
-      dataIndex: 'height',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-
     {
       title: '添加时间',
       dataIndex: 'created_at',
@@ -126,10 +114,10 @@ const Page: React.FC = (props) => {
     },
     {
       title: '操作',
-      width: 255,
+      width: 155,
       valueType: 'option',
       render: (text, record, _, action) => [
-        <Button type="primary" disabled={record?.status === 1 ? true : false} onClick={() => {
+        <Button type="primary" onClick={() => {
           seteditShow(true)
           setselect(record?.id)
         }}>编辑</Button>,
@@ -164,10 +152,9 @@ const Page: React.FC = (props) => {
             total: msg.count,
           };
         }}
-        search={false}
         rowKey="id"
         pagination={{
-          pageSize: pagesize,
+          pageSize: 10,
         }}
         dateFormatter="string"
         headerTitle={false}

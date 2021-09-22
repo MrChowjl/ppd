@@ -24,7 +24,7 @@ const Form: React.FC<FormParams> = (props) => {
     }>()
     useEffect(() => {
         let form = new FormData()
-        form.append('k', Select ? Select : '0')
+        form.append('k', Select ? Select : '')
         Select && getCurrent({ k: Select }).then(res => {
             if (res.code === 1) {
                 setcurrent(res.data)
@@ -38,7 +38,8 @@ const Form: React.FC<FormParams> = (props) => {
         }}
             initialValues={{
                 title: current?.title,
-                device_type: current?.device_type
+                device_type: current?.device_type,
+                url: current?.url
             }}
             layout={'horizontal'}
             visible={true}
@@ -92,23 +93,31 @@ const Form: React.FC<FormParams> = (props) => {
                     }
                 ]}
             />
-            <ProFormUploadButton
-                name="file"
-                label="人群包"
-                max={1}
-                fieldProps={{
-                    name: 'file',
-                    listType: 'picture-card'
-                }}
-                rules={[
-                    {
-                        required: true,
-                        message: '人群包是必传项！'
-                    }
-                ]}
-                action={''}
-                extra="请上传小于4M的png/jpg格式的图片"
-            />
+            {current?.title ?
+                <ProFormText
+                    width="md"
+                    name="url"
+                    label="人群包路径"
+                    placeholder="请输入"
+                    disabled={true}
+                /> :
+                <ProFormUploadButton
+                    name="file"
+                    label="人群包"
+                    max={1}
+                    fieldProps={{
+                        name: 'file',
+                        listType: 'picture-card'
+                    }}
+                    rules={[
+                        {
+                            required: true,
+                            message: '人群包是必传项！'
+                        }
+                    ]}
+                    action={''}
+                    extra="请上传以txt后缀结尾的文本文件"
+                />}
         </ModalForm > : null
     );
 };
