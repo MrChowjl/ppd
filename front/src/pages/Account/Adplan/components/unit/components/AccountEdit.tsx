@@ -187,7 +187,7 @@ const Form: React.FC<FormParams> = (props) => {
             />
             <ProFormText
                 width="md"
-                name="app_name"
+                name="app_title"
                 label="APP名称"
                 placeholder="请输入"
                 rules={[
@@ -206,6 +206,18 @@ const Form: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: 'APP包名是必填项！'
+                    }
+                ]}
+            />
+            <ProFormText
+                width="md"
+                name="app_down_addr"
+                label="APP下载地址"
+                placeholder="请输入"
+                rules={[
+                    {
+                        required: true,
+                        message: 'APP下载地址是必填项！'
                     }
                 ]}
             />
@@ -263,18 +275,6 @@ const Form: React.FC<FormParams> = (props) => {
                 label="点击监测"
                 placeholder="请输入"
                 rules={[
-                ]}
-            />
-            <ProFormText
-                width="md"
-                name="app_down_addr"
-                label="APP下载地址"
-                placeholder="请输入"
-                rules={[
-                    {
-                        required: true,
-                        message: 'APP下载地址是必填项！'
-                    }
                 ]}
             />
             <ProFormRadio.Group
