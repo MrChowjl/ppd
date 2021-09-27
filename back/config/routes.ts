@@ -75,12 +75,12 @@
                 icon: 'BorderHorizontalOutlined',
                 component: './PlanCheck',
               },
-              // {
-              //   path: '/subuser',
-              //   name: '广告主审核',
-              //   icon: 'ReadOutlined',
-              //   component: './Subuser',
-              // },
+              {
+                path: '/unitCheck',
+                name: '单元审核',
+                icon: 'RadiusSettingOutlined',
+                component: './UnitCheck',
+              },
               // {
               //   path: '/subuser',
               //   name: '广告账户审核',

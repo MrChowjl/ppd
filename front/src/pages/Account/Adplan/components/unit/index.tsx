@@ -60,11 +60,17 @@ const Page: React.FC = (props) => {
       title: '关键词',
       dataIndex: 'keywords',
       ellipsis: true,
-      hideInTable: true,
+      hideInTable: true
     },
     {
-      title: '计划名称',
+      title: '单元名',
       dataIndex: 'name',
+      ellipsis: true,
+      hideInSearch: true
+    },
+    {
+      title: '所属计划',
+      dataIndex: 'plan_name',
       ellipsis: true,
       hideInSearch: true
     },
@@ -76,9 +82,9 @@ const Page: React.FC = (props) => {
       render: (r, re) => {
         return (
           <Switch checked={re.is_active === 1 ? true : false} onChange={() => {
-            switchAccount(
-              { id: re.id }
-            ).then(res => {
+            let form = new FormData()
+            form.append('id', re?.id.toString())
+            switchAccount(form).then(res => {
               if (res.code === 1) {
                 message.success(res.msg)
                 actionRef.current?.reload()
@@ -99,6 +105,12 @@ const Page: React.FC = (props) => {
       },
     },
     {
+      title: '消耗',
+      dataIndex: 'used',
+      ellipsis: true,
+      hideInSearch: true,
+    },
+    {
       title: '总预算',
       dataIndex: 'budget_all',
       ellipsis: true,
@@ -111,26 +123,14 @@ const Page: React.FC = (props) => {
       hideInSearch: true,
     },
     {
-      title: '明日预算',
-      dataIndex: 'budget_tomorrow',
+      title: '转化',
+      dataIndex: 'change',
       ellipsis: true,
       hideInSearch: true,
     },
     {
-      title: '消耗',
-      dataIndex: 'used',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '曝光',
-      dataIndex: 'frequency_show',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: 'CPM',
-      dataIndex: 'cpm',
+      title: '转化率',
+      dataIndex: 'change_rate',
       ellipsis: true,
       hideInSearch: true,
     },
@@ -147,20 +147,26 @@ const Page: React.FC = (props) => {
       hideInSearch: true,
     },
     {
+      title: '出价',
+      dataIndex: 'cost_value',
+      ellipsis: true,
+      hideInSearch: true,
+    },
+    {
+      title: '曝光',
+      dataIndex: 'frequency_show',
+      ellipsis: true,
+      hideInSearch: true,
+    },
+    {
+      title: 'CPM',
+      dataIndex: 'cpm',
+      ellipsis: true,
+      hideInSearch: true,
+    },
+    {
       title: 'CPC',
       dataIndex: 'cpc',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '转化',
-      dataIndex: 'change',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '转化率',
-      dataIndex: 'change_rate',
       ellipsis: true,
       hideInSearch: true,
     },

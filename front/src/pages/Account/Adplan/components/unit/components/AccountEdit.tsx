@@ -78,6 +78,7 @@ const Formt: React.FC<FormParams> = (props) => {
         Select && getCurrent(Select).then(res => {
             if (res.code === 1) {
                 setcurrent(res.data)
+                setAPPlogo(res.data.content?.app_logo)
             }
         })
         setSelectOptions()
@@ -129,14 +130,27 @@ const Formt: React.FC<FormParams> = (props) => {
                 network: current?.cond_network,
                 passed_crowd: current?.cond_passed_crowd,
                 denied_crowd: current?.cond_denied_crowd,
-                app_title: current?.cond_denied_crowd,
+                app_title: current?.content?.app_title,
+                app_name: current?.content?.app_name,
+                app_down_addr: current?.content?.app_down_addr,
+                action_type: current?.content?.action_type && Number(current?.content?.action_type),
+                page_addr: current?.content?.page_addr,
+                apply_addr: current?.content?.apply_addr,
+                show_addr: current?.content?.show_addr,
+                click_addr: current?.content?.click_addr,
+                budget: current?.budget_all ? 1 : 0,
                 budgetall: current?.budget_all,
-                dateplan: current ? [current && moment(current.sdate * 1000).format('yyyy-MM-DD'), moment(current && current.edate * 1000).format('yyyy-MM-DD')] : null,
                 budgetday: current?.budget_day,
-                budgettomorrow: current?.budget_tomorrow,
-                app_down_addr: 'http://www.fff.dsdssd',
-                apply_addr: 'http://www.fff.dsdssd',
-                click_addr: 'http://www.fff.dsdssd',
+                cost_type: current?.cost_type,
+                cost_value: current?.cost_value,
+                adddate: current?.started_at ? 1 : 0,
+                dateplan: current && current?.started_at ? [current.started_at && moment(current.started_at * 1000).format('yyyy-MM-DD') || '', moment(current && current.stopped_at * 1000).format('yyyy-MM-DD') || ''] : null,
+                addtime: current?.started_hour ? 1 : 0,
+                shour: current?.started_hour && moment(current?.started_hour, 'HH:mm:ss'),
+                ehour: current?.stopped_hour && moment(current?.stopped_hour, 'HH:mm:ss'),
+                addrate: (current?.frequency_show || current?.frequency_click) ? 1 : 0,
+                show_times: current?.frequency_show,
+                click_times: current?.frequency_click
             }}
             layout={'horizontal'}
             visible={true}
@@ -147,7 +161,6 @@ const Formt: React.FC<FormParams> = (props) => {
                 onCancel: () => onCancel()
             }}
             onFinish={async (values) => {
-                console.log(values)
                 let form = new FormData()
                 form.append('id', Select || '')
                 form.append('title', values.title || '')
