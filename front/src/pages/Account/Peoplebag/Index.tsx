@@ -89,7 +89,7 @@ const Page: React.FC = (props) => {
       hideInSearch: true,
     },
     {
-      title: '文件大小(s)',
+      title: '文件大小(b)',
       dataIndex: 'filesize',
       ellipsis: true,
       hideInSearch: true,
