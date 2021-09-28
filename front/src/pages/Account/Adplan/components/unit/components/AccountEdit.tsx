@@ -172,7 +172,7 @@ const Formt: React.FC<FormParams> = (props) => {
                 form.append('region', values.region || '')
                 form.append('gender', values.gender || '')
                 form.append('network', values.network || '')
-                form.append('app_logo', values.file?.[0]?.originFileObj || APPLogo)
+                form.append('app_logo', APPLogo || values.file?.[0]?.originFileObj)
                 form.append('app_name', values.app_name || '')
                 form.append('app_title', values.app_title || '')
                 form.append('app_down_addr', values.app_down_addr || '')
@@ -384,6 +384,10 @@ const Formt: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: 'APP下载地址是必填项！'
+                    },
+                    {
+                        pattern: /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/,
+                        message: '请输入正确的url地址（以http://或https://开头）'
                     }
                 ]}
             />
@@ -411,6 +415,10 @@ const Formt: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: '落地页地址是必填项！'
+                    },
+                    {
+                        pattern: /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/,
+                        message: '请输入正确的url地址（以http://或https://开头）'
                     }
                 ]}
             />
@@ -423,6 +431,10 @@ const Formt: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: '应用直达链接是必填项！'
+                    },
+                    {
+                        pattern: /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/,
+                        message: '请输入正确的url地址（以http://或https://开头）'
                     }
                 ]}
             />
@@ -435,6 +447,10 @@ const Formt: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: '曝光监测是必填项！'
+                    },
+                    {
+                        pattern: /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/,
+                        message: '请输入正确的url地址（以http://或https://开头）'
                     }
                 ]}
             />
@@ -447,6 +463,10 @@ const Formt: React.FC<FormParams> = (props) => {
                     {
                         required: true,
                         message: '点击监测是必填项！'
+                    },
+                    {
+                        pattern: /(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/,
+                        message: '请输入正确的url地址（以http://或https://开头）'
                     }
                 ]}
             />

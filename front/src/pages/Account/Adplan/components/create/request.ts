@@ -1,37 +1,76 @@
 import request from '@/utils/request';
 
+let id = location.search.charAt(location.search.length - 1)
+
 export async function mediaEdit(params: any) {
-    return request('/v1/member/subuser_edit', {
+    params.append('acc_id', id)
+    return request('/v1/ad_designs_update', {
         method: 'POST',
         data: params,
     });
 }
 
-
 export async function queryList(params: any) {
-    return request('/v1/member/subuser_list', {
+    return request('/v1/ad_designs_list', {
         method: 'GET',
-        params: params,
+        params: {
+            acc_id: id,
+            ...params
+        },
     });
 }
 
-export async function getCurrent(params: any) {
-    return request('/v1/member/project_one', {
+export async function getApp() {
+    return request('/v1/app_section', {
         method: 'GET',
-        params: params,
+        params: {
+            acc_id: id
+        },
+    });
+}
+
+export async function getPeople() {
+    return request('/v1/member/crowds_list', {
+        method: 'GET',
+        params: {
+            acc_id: id
+        },
+    });
+}
+
+export async function getLogo(params: any) {
+    return request('/v1/member/materials_list', {
+        method: 'GET',
+        params: {
+            acc_id: id,
+            ...params
+        },
+    });
+}
+
+export async function queryOption() {
+    return request(`/v1/add_units_section/${id}`, {
+        method: 'GET',
+    });
+}
+
+export async function getCurrent(id: any) {
+    return request(`/v1/ad_unit_info/${id}`, {
+        method: 'GET',
     });
 }
 
 
 export async function deleteCurrent(params: any) {
-    return request('/v1/member/delete/subuser', {
+    return request('/v1/ad_unit_del', {
         method: 'POST',
         data: params,
     });
 }
 
-export async function getIndustry() {
-    return request('/v1/member/industry_list', {
-        method: 'GET'
+export async function switchAccount(params: any) {
+    return request('/v1/ad_unit_open_close', {
+        method: 'POST',
+        data: params,
     });
 }
