@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Space, message, Image, Form, Button, Popover, Tabs } from 'antd';
 const { TabPane } = Tabs;
 import { DeleteOutlined } from '@ant-design/icons';
-import { mediaEdit, getCurrent, queryOption, getApp, getPeople, getLogo } from './../request'
+import { mediaEdit, getCurrent, getPlan, getUnit, getLogo, getStyle } from './../request'
 import ProForm, {
     ModalForm,
     ProFormText,
@@ -25,6 +25,7 @@ const Formt: React.FC<FormParams> = (props) => {
     const { onCancel, Select, reload } = props
     const [APPLogo, setAPPlogo] = useState<string>()
     const [trendsvideo, settrendsvideo] = useState<string>()
+    const [unit, setunit] = useState<number | null>(2)
     const [logoVisible, setlogoVisible] = useState<boolean>(false)
     const [current, setcurrent] = useState<{
         name?: string;
@@ -35,48 +36,17 @@ const Formt: React.FC<FormParams> = (props) => {
         sdate: string;
     }>()
     const [option, setoption] = useState<{
-        plan?: any,
-        ad_type?: any[],
-        os?: any[],
-        region?: any[],
-        gender?: any[],
-        network?: any[],
-        passed_crowd?: any[],
-        denied_crowd?: any[],
-        passed_app?: any[],
-        denied_app?: any[],
+        plan?: any[],
+        unit?: any[]
         logodata?: any[],
-        videodata?: any[]
+        videodata?: any[],
+        style?: any[]
     }>({
-        ad_type: [
-            { label: '信息流列表页', value: 1 },
-            { label: '开屏', value: 2 },
-            { label: '横幅', value: 3 },
-            { label: '激励视频', value: 4 },
-        ],
-        os: [
-            { label: '不限', value: 0 },
-            { label: '安卓', value: 1 },
-            { label: 'IOS', value: 2 },
-        ],
-        region: ['不限', '西南', '华北', '华南', '东北', '华中', '西北', '东南', '华东'],
-        gender: [
-            { label: '不限', value: 0 },
-            { label: '男', value: 1 },
-            { label: '女', value: 2 },
-        ],
-        network: [
-            { label: 'WIFI', value: 1 },
-            { label: '2G', value: 2 },
-            { label: '3G', value: 3 },
-            { label: '4G', value: 4 },
-            { label: '5G', value: 5 },
-        ],
-        passed_app: [],
-        denied_app: [],
-        passed_crowd: [],
-        denied_crowd: [],
+        plan: [],
+        unit: [],
         logodata: [],
+        videodata: [],
+        style: []
     })
     useEffect(() => {
         Select && getCurrent(Select).then(res => {
@@ -88,24 +58,12 @@ const Formt: React.FC<FormParams> = (props) => {
         setSelectOptions()
     }, [])
     const setSelectOptions = async () => {
-        let allselect = await queryOption()
-        let resapp = await getApp()
-        let respeople = await getPeople()
         let resLogo = await getLogo({ type: 0 })
         let resVideo = await getLogo({ type: 1 })
-        if (resapp.code === 1 && respeople.code === 1 && allselect.code === 1 && resVideo.code === 1) {
-            let reap = resapp.data?.map(((itm: any) => {
-                return {
-                    label: itm.name,
-                    value: itm.id
-                }
-            }))
-            let reppl = respeople.data?.map(((itm: any) => {
-                return {
-                    label: itm.title,
-                    value: itm.id
-                }
-            }))
+        let resStyle = await getStyle()
+        let resPlan = await getPlan()
+        let resUnit = await getUnit()
+        if (resLogo.code === 1 && resVideo.code === 1) {
             let replogo = resLogo.data?.map(((itm: any) => {
                 return {
                     label: itm.url,
@@ -119,10 +77,32 @@ const Formt: React.FC<FormParams> = (props) => {
                     value: itm.id
                 }
             }))
+            let reStyle = resStyle.data?.map(((itm: any) => {
+                return {
+                    label: itm.url,
+                    value: itm.name
+                }
+            }))
+            let rePlan = resPlan.data.list?.map(((itm: any) => {
+                return {
+                    label: itm.name,
+                    value: itm.id
+                }
+            }))
+            let reUnit = resUnit.data.list?.map(((itm: any) => {
+                return {
+                    label: itm.name,
+                    plan_id: itm.plan_id,
+                    value: itm.id
+                }
+            }))
+
             setoption({
-                ...option, ...allselect.data, ...{ passed_app: reap }, ...{ denied_app: reap },
-                ...{ passed_crowd: reppl }, ...{ denied_crowd: reppl }, ...{ logodata: replogo },
-                ...{ videodata: reVideo }
+                ...option, ...{ logodata: replogo },
+                ...{ videodata: reVideo },
+                ...{ style: reStyle },
+                ...{ plan: rePlan },
+                ...{ unit: reUnit },
             })
         }
     }
@@ -132,7 +112,7 @@ const Formt: React.FC<FormParams> = (props) => {
             wrapperCol: { span: 14 },
         }}
             initialValues={{
-                plan_id: current?.ad_plan_id?.toString(),
+                plan_id: current?.ad_plan_id?.toString() || 1,
                 title: current?.name,
                 ad_type: current?.ad_place_type || 1,
                 passed_app: current?.cond_passed_app,
@@ -206,8 +186,6 @@ const Formt: React.FC<FormParams> = (props) => {
                 form.append('denied_app', values.denied_app || '')
                 form.append('passed_crowd', values.passed_crowd || '')
                 form.append('denied_crowd', values.denied_crowd || '')
-                console.log(form)
-
                 let res = await mediaEdit(form);
                 if (res.code === 1) {
                     message.success(res.msg);
@@ -221,26 +199,45 @@ const Formt: React.FC<FormParams> = (props) => {
                 width="md"
                 name="plan_id"
                 label="选择计划"
-                valueEnum={option?.plan}
+                options={option?.plan}
                 rules={[
                     {
                         required: true,
                         message: '选择计划是必填项！'
                     }
                 ]}
+                fieldProps={{
+                    onChange: () => setunit(null)
+                }}
             />
-            <ProFormSelect
-                width="md"
-                name="unit_id"
-                label="选择单元"
-                valueEnum={option?.plan}
-                rules={[
-                    {
-                        required: true,
-                        message: '选择单元是必填项！'
-                    }
-                ]}
-            />
+            <ProForm.Item noStyle shouldUpdate>
+                {(form) => {
+                    let re = form.getFieldValue("plan_id")
+                    console.log(re)
+
+                    return (
+                        <>{re ?
+                            <ProFormSelect
+                                width="md"
+                                name="unit_id"
+                                label="选择单元"
+                                options={option?.unit?.filter(itm => re === itm.plan_id)}
+                                fieldProps={{
+                                    value: unit,
+                                    defaultValue: unit,
+                                    onChange: (value) => { setunit(value) }
+                                }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: '选择单元是必填项！'
+                                    }
+                                ]}
+                            /> : null}
+                        </>
+                    );
+                }}
+            </ProForm.Item>
             <ProFormText
                 width="md"
                 name="name"
@@ -253,11 +250,11 @@ const Formt: React.FC<FormParams> = (props) => {
                     }
                 ]}
             />
-            <ProFormRadio.Group
+            <ProFormSelect
                 width="md"
                 name="ad_style_type"
                 label="创意样式"
-                options={option?.ad_type}
+                options={option?.style}
                 rules={[
                     {
                         required: true,

@@ -48,6 +48,12 @@ export async function getLogo(params: any) {
     });
 }
 
+export async function getStyle() {
+    return request(`/v1/ad_style_type/${id}`, {
+        method: 'GET'
+    });
+}
+
 export async function queryOption() {
     return request(`/v1/add_units_section/${id}`, {
         method: 'GET',
@@ -72,5 +78,23 @@ export async function switchAccount(params: any) {
     return request('/v1/ad_unit_open_close', {
         method: 'POST',
         data: params,
+    });
+}
+
+export async function getPlan() {
+    return request('/v1/ad_plan_list', {
+        method: 'GET',
+        params: {
+            acc_id: id
+        },
+    });
+}
+
+export async function getUnit() {
+    return request('/v1/ad_unit_list', {
+        method: 'GET',
+        params: {
+            acc_id: id
+        },
     });
 }
