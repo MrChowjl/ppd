@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PlusOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Button, Tag, Badge, Switch, Popconfirm, message } from 'antd';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
-import { queryList, deleteCurrent, switchAccount } from './request'
+import { queryList, deleteCurrent, switchAccount, getPlan, getUnit } from './request'
 
 type GithubIssueItem = {
   url: string;
@@ -26,8 +26,42 @@ type GithubIssueItem = {
 const Page: React.FC = (props) => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
-  const [pagesize, setpagesize] = useState<number>(10)
   const [select, setselect] = useState<string>()
+  const [option, setoption] = useState<{
+    plan?: any[],
+    unit?: any[]
+  }>({
+    plan: [],
+    unit: []
+  })
+  useEffect(() => {
+    GetOption()
+  }, [])
+  const GetOption = async () => {
+    let resPlan = await getPlan()
+    let resUnit = await getUnit()
+    let rePlan = resPlan.data.list?.map(((itm: any) => {
+      return {
+        text: itm.name,
+        status: itm.id
+      }
+    }))
+    let reUnit = resUnit.data.list?.map(((itm: any) => {
+      return {
+        text: itm.name,
+        status: itm.id
+      }
+    }))
+    console.log({
+      ...{ plan: rePlan },
+      ...{ unit: reUnit },
+    })
+    
+    setoption({
+      ...{ plan: rePlan },
+      ...{ unit: reUnit },
+    })
+  }
   const confirm = (id: string) => {
     let form = new FormData()
     form.append('id', id)
@@ -63,7 +97,23 @@ const Page: React.FC = (props) => {
       hideInTable: true
     },
     {
-      title: '单元名',
+      title: '选择计划',
+      dataIndex: 'plan_id',
+      ellipsis: true,
+      valueType: 'select',
+      valueEnum: option.plan,
+      hideInTable: true
+    },
+    {
+      title: '选择单元',
+      dataIndex: 'unit_id',
+      ellipsis: true,
+      valueType: 'select',
+      valueEnum: option.unit,
+      hideInTable: true
+    },
+    {
+      title: '创意名',
       dataIndex: 'name',
       ellipsis: true,
       hideInSearch: true
@@ -73,6 +123,12 @@ const Page: React.FC = (props) => {
       dataIndex: 'plan_name',
       ellipsis: true,
       hideInSearch: true
+    },
+    {
+      title: '所属单元',
+      dataIndex: 'unit_name',
+      ellipsis: true,
+      hideInSearch: true,
     },
     {
       title: '开关',
@@ -111,18 +167,6 @@ const Page: React.FC = (props) => {
       hideInSearch: true,
     },
     {
-      title: '总预算',
-      dataIndex: 'budget_all',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '日预算',
-      dataIndex: 'budget_day',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
       title: '转化',
       dataIndex: 'change',
       ellipsis: true,
@@ -143,12 +187,6 @@ const Page: React.FC = (props) => {
     {
       title: '点击率',
       dataIndex: 'change_rate',
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: '出价',
-      dataIndex: 'cost_value',
       ellipsis: true,
       hideInSearch: true,
     },
@@ -178,7 +216,7 @@ const Page: React.FC = (props) => {
     },
     {
       title: '操作',
-      width: 255,
+      width: 200,
       valueType: 'option',
       render: (text, record, _, action) => [
         <Button type="primary" disabled={record?.status === 1 ? true : false} onClick={() => {
@@ -220,7 +258,7 @@ const Page: React.FC = (props) => {
         }}
         rowKey="id"
         pagination={{
-          pageSize: pagesize,
+          pageSize: 20,
         }}
         dateFormatter="string"
         headerTitle={false}

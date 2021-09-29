@@ -61,7 +61,7 @@ export async function queryOption() {
 }
 
 export async function getCurrent(id: any) {
-    return request(`/v1/ad_unit_info/${id}`, {
+    return request(`/v1/ad_designs_info/${id}`, {
         method: 'GET',
     });
 }

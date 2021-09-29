@@ -23,9 +23,13 @@ interface FormParams {
 }
 const Formt: React.FC<FormParams> = (props) => {
     const { onCancel, Select, reload } = props
-    const [APPLogo, setAPPlogo] = useState<string>()
-    const [trendsvideo, settrendsvideo] = useState<string>()
-    const [unit, setunit] = useState<number | null>(2)
+    const [APPLogo, setAPPlogo] = useState<any>()
+    const [trendsurl, settrendsurl] = useState<any>()
+    const [trendsvideo, settrendsvideo] = useState<any>()
+    const [planOption, setplanOption] = useState<any[]>([])
+    const [plan, setplan] = useState<string | null>()
+    const [unitOption, setunitOption] = useState<any[] | undefined>([])
+    const [unit, setunit] = useState<string | null>()
     const [logoVisible, setlogoVisible] = useState<boolean>(false)
     const [current, setcurrent] = useState<{
         name?: string;
@@ -49,62 +53,75 @@ const Formt: React.FC<FormParams> = (props) => {
         style: []
     })
     useEffect(() => {
-        Select && getCurrent(Select).then(res => {
-            if (res.code === 1) {
-                setcurrent(res.data)
-                setAPPlogo(res.data.content?.app_logo)
+        setSelectOptions().then((option) => {
+            Select && getCurrent(Select).then(res => {
+                if (res.code === 1) {
+                    setcurrent(res.data)
+                    setunitOption(() => option.unit?.filter(itm => res.data.ad_plan_id === itm.plan_id))
+                    settrendsurl(res.data.material_url)
+                }
+            })
+        })
+    }, [])
+    useEffect(() => {
+        setunitOption(() => option.unit?.filter(itm => plan === itm.plan_id))
+    }, [plan])
+    const setSelectOptions = async () => {
+        return new Promise(async (resolve, reject) => {
+            let resLogo = await getLogo({ type: 0 })
+            let resVideo = await getLogo({ type: 1 })
+            let resStyle = await getStyle()
+            let resPlan = await getPlan()
+            let resUnit = await getUnit()
+            if (resLogo.code === 1 && resVideo.code === 1) {
+                let replogo = resLogo.data?.map(((itm: any) => {
+                    return {
+                        label: itm.thumbnail,
+                        url: itm.url,
+                        value: itm.id
+                    }
+                }))
+                let reVideo = resVideo.data?.map(((itm: any) => {
+                    return {
+                        label: itm.thumbnail,
+                        url: itm.url,
+                        value: itm.id
+                    }
+                }))
+                let reStyle = resStyle.data?.map(((itm: any) => {
+                    return {
+                        label: itm.name,
+                        value: itm.id
+                    }
+                }))
+                let rePlan = resPlan.data.list?.map(((itm: any) => {
+                    return {
+                        label: itm.name,
+                        value: itm.id
+                    }
+                }))
+                let reUnit = resUnit.data.list?.map(((itm: any) => {
+                    return {
+                        label: itm.name,
+                        plan_id: itm.plan_id,
+                        value: itm.id
+                    }
+                }))
+                setplanOption(rePlan)
+                setoption({
+                    ...option, ...{ logodata: replogo },
+                    ...{ videodata: reVideo },
+                    ...{ style: reStyle },
+                    ...{ unit: reUnit },
+                })
+                resolve({
+                    ...option, ...{ logodata: replogo },
+                    ...{ videodata: reVideo },
+                    ...{ style: reStyle },
+                    ...{ unit: reUnit },
+                })
             }
         })
-        setSelectOptions()
-    }, [])
-    const setSelectOptions = async () => {
-        let resLogo = await getLogo({ type: 0 })
-        let resVideo = await getLogo({ type: 1 })
-        let resStyle = await getStyle()
-        let resPlan = await getPlan()
-        let resUnit = await getUnit()
-        if (resLogo.code === 1 && resVideo.code === 1) {
-            let replogo = resLogo.data?.map(((itm: any) => {
-                return {
-                    label: itm.url,
-                    value: itm.id
-                }
-            }))
-            let reVideo = resVideo.data?.map(((itm: any) => {
-                return {
-                    label: itm.thumbnail,
-                    url: itm.url,
-                    value: itm.id
-                }
-            }))
-            let reStyle = resStyle.data?.map(((itm: any) => {
-                return {
-                    label: itm.url,
-                    value: itm.name
-                }
-            }))
-            let rePlan = resPlan.data.list?.map(((itm: any) => {
-                return {
-                    label: itm.name,
-                    value: itm.id
-                }
-            }))
-            let reUnit = resUnit.data.list?.map(((itm: any) => {
-                return {
-                    label: itm.name,
-                    plan_id: itm.plan_id,
-                    value: itm.id
-                }
-            }))
-
-            setoption({
-                ...option, ...{ logodata: replogo },
-                ...{ videodata: reVideo },
-                ...{ style: reStyle },
-                ...{ plan: rePlan },
-                ...{ unit: reUnit },
-            })
-        }
     }
     return (
         (Select ? current?.name ? true : false : true) ? <ModalForm<any> {...{
@@ -112,38 +129,15 @@ const Formt: React.FC<FormParams> = (props) => {
             wrapperCol: { span: 14 },
         }}
             initialValues={{
-                plan_id: current?.ad_plan_id?.toString() || 1,
-                title: current?.name,
-                ad_type: current?.ad_place_type || 1,
-                passed_app: current?.cond_passed_app,
-                denied_app: current?.cond_denied_app,
-                os: current?.cond_os || 0,
-                gender: current?.cond_gender || 0,
-                region: current?.cond_region,
-                network: current?.cond_network,
-                passed_crowd: current?.cond_passed_crowd,
-                denied_crowd: current?.cond_denied_crowd,
-                app_title: current?.content?.app_title,
-                app_name: current?.content?.app_name,
-                app_down_addr: current?.content?.app_down_addr,
-                action_type: current?.content?.action_type && Number(current?.content?.action_type),
-                page_addr: current?.content?.page_addr,
-                apply_addr: current?.content?.apply_addr,
-                show_addr: current?.content?.show_addr,
-                click_addr: current?.content?.click_addr,
-                budget: current?.budget_all ? 1 : 0,
-                budgetall: current?.budget_all,
-                budgetday: current?.budget_day,
-                cost_type: current?.cost_type,
-                cost_value: current?.cost_value,
-                adddate: current?.started_at ? 1 : 0,
-                dateplan: current && current?.started_at ? [current.started_at && moment(current.started_at * 1000).format('yyyy-MM-DD') || '', moment(current && current.stopped_at * 1000).format('yyyy-MM-DD') || ''] : null,
-                addtime: current?.started_hour ? 1 : 0,
-                shour: current?.started_hour && moment(current?.started_hour, 'HH:mm:ss'),
-                ehour: current?.stopped_hour && moment(current?.stopped_hour, 'HH:mm:ss'),
-                addrate: (current?.frequency_show || current?.frequency_click) ? 1 : 0,
-                show_times: current?.frequency_show,
-                click_times: current?.frequency_click
+                plan_id: current?.ad_plan_id,
+                unit_id: current?.ad_unit_id,
+                name: current?.name,
+                ad_style_type: current?.ad_style_type,
+                ad_title: current?.ad_title,
+                material_url: current?.material_url,
+                ad_info: current?.ad_info,
+                adddate: current?.sdate ? 1 : 0,
+                dateplan: current && current?.sdate ? [current.sdate && moment(current.sdate * 1000).format('yyyy-MM-DD') || '', moment(current && current.edate * 1000).format('yyyy-MM-DD') || ''] : null,
             }}
             layout={'horizontal'}
             visible={true}
@@ -156,36 +150,16 @@ const Formt: React.FC<FormParams> = (props) => {
             onFinish={async (values) => {
                 let form = new FormData()
                 form.append('id', Select || '')
-                form.append('title', values.title || '')
+                form.append('plan_id', plan || current?.ad_plan_id || '')
+                form.append('unit_id', unit || current?.ad_unit_id || '')
+                form.append('name', values.name || '')
+                form.append('ad_style_type', values.ad_style_type || '')
+                form.append('material_id', APPLogo?.value || trendsvideo?.value || '')
+                form.append('material_url', APPLogo?.url || trendsvideo?.url || trendsurl || '')
+                form.append('ad_title', values.ad_title || '')
+                form.append('ad_info', values.ad_info || '')
                 form.append('sdate', values.dateplan?.[0] || '')
                 form.append('edate', values.dateplan?.[1] || '')
-                form.append('plan_id', values.plan_id || '')
-                form.append('ad_type', values.ad_type || '')
-                form.append('os', values.os || '')
-                form.append('region', values.region || '')
-                form.append('gender', values.gender || '')
-                form.append('network', values.network || '')
-                form.append('app_logo', values.file?.[0]?.originFileObj || APPLogo)
-                form.append('app_name', values.app_name || '')
-                form.append('app_title', values.app_title || '')
-                form.append('app_down_addr', values.app_down_addr || '')
-                form.append('action_type', values.action_type || '')
-                form.append('page_addr', values.page_addr || '')
-                form.append('apply_addr', values.apply_addr || '')
-                form.append('show_addr', values.show_addr || '')
-                form.append('click_addr', values.click_addr || '')
-                form.append('budgetday', values.budgetday || '')
-                form.append('budgetall', values.budgetall || '')
-                form.append('cost_type', values.cost_type || '')
-                form.append('cost_value', values.cost_value || '')
-                form.append('shour', values.shour || '')
-                form.append('ehour', values.ehour || '')
-                form.append('show_times', values.show_times || '')
-                form.append('click_times', values.click_times || '')
-                form.append('passed_app', values.passed_app || '')
-                form.append('denied_app', values.denied_app || '')
-                form.append('passed_crowd', values.passed_crowd || '')
-                form.append('denied_crowd', values.denied_crowd || '')
                 let res = await mediaEdit(form);
                 if (res.code === 1) {
                     message.success(res.msg);
@@ -199,7 +173,7 @@ const Formt: React.FC<FormParams> = (props) => {
                 width="md"
                 name="plan_id"
                 label="选择计划"
-                options={option?.plan}
+                options={planOption}
                 rules={[
                     {
                         required: true,
@@ -207,7 +181,9 @@ const Formt: React.FC<FormParams> = (props) => {
                     }
                 ]}
                 fieldProps={{
-                    onChange: () => setunit(null)
+                    value: plan,
+                    defaultValue: plan,
+                    onChange: (value) => { setunit(null); setplan(value) }
                 }}
             />
             <ProForm.Item noStyle shouldUpdate>
@@ -221,7 +197,7 @@ const Formt: React.FC<FormParams> = (props) => {
                                 width="md"
                                 name="unit_id"
                                 label="选择单元"
-                                options={option?.unit?.filter(itm => re === itm.plan_id)}
+                                options={unitOption}
                                 fieldProps={{
                                     value: unit,
                                     defaultValue: unit,
@@ -262,23 +238,7 @@ const Formt: React.FC<FormParams> = (props) => {
                     }
                 ]}
             />
-            {!APPLogo && !trendsvideo ? <ProFormUploadButton
-                name="file"
-                label="素材"
-                max={1}
-                fieldProps={{
-                    name: 'file',
-                    listType: 'picture-card'
-                }}
-                rules={[
-                    {
-                        required: true,
-                        message: '素材是必传项！'
-                    }
-                ]}
-                action={''}
-            /> : null}
-            {!APPLogo && !trendsvideo ? <Form.Item label="素材库" valuePropName="checked">
+            {!Select ? !APPLogo && !trendsvideo ? <Form.Item label="素材库" valuePropName="checked">
                 <Popover
                     content={(
                         <Tabs defaultActiveKey="1" tabPosition='left'>
@@ -296,7 +256,7 @@ const Formt: React.FC<FormParams> = (props) => {
                                             <Image
                                                 style={{ cursor: 'pointer' }}
                                                 onClick={() => {
-                                                    setAPPlogo(itm.label)
+                                                    setAPPlogo(itm)
                                                     setlogoVisible(false)
                                                 }}
                                                 preview={false}
@@ -323,7 +283,7 @@ const Formt: React.FC<FormParams> = (props) => {
                                             <Image
                                                 style={{ cursor: 'pointer' }}
                                                 onClick={() => {
-                                                    settrendsvideo(itm.url)
+                                                    settrendsvideo(itm)
                                                     setlogoVisible(false)
                                                 }}
                                                 preview={false}
@@ -345,23 +305,30 @@ const Formt: React.FC<FormParams> = (props) => {
                 >
                     <Button>点击选择</Button>
                 </Popover>
-            </Form.Item> : null}
-            {APPLogo ? <Form.Item label="素材" valuePropName="checked">
+            </Form.Item> : null : null}
+            {!Select ? APPLogo ? <Form.Item label="素材" valuePropName="checked">
                 <Image
                     preview={false}
                     height={125}
-                    src={APPLogo}
+                    src={APPLogo.url}
                 ></Image>
                 <DeleteOutlined onClick={() => {
                     setAPPlogo('')
                 }} style={{ fontSize: 16, cursor: 'pointer', marginLeft: 5 }} />
-            </Form.Item> : null}
+            </Form.Item> : null : null}
             {trendsvideo ? <Form.Item label="素材" valuePropName="checked">
-                <video controls height={125} src={trendsvideo}></video>
+                <video controls height={125} src={trendsvideo.url}></video>
                 <DeleteOutlined onClick={() => {
                     settrendsvideo('')
                 }} style={{ fontSize: 16, cursor: 'pointer', marginLeft: 5 }} />
             </Form.Item> : null}
+            {Select ? <ProFormText
+                width="md"
+                name="material_url"
+                label="素材"
+                placeholder="请输入"
+                disabled={true}
+            /> : null}
             <ProFormText
                 width="md"
                 name="ad_title"
