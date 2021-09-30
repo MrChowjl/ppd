@@ -81,12 +81,12 @@
                 icon: 'RadiusSettingOutlined',
                 component: './UnitCheck',
               },
-              // {
-              //   path: '/subuser',
-              //   name: '广告账户审核',
-              //   icon: 'ScheduleOutlined',
-              //   component: './Subuser',
-              // },
+              {
+                path: '/createCheck',
+                name: '创意审核',
+                icon: 'PicCenterOutlined',
+                component: './CreateCheck',
+              },
               // {
               //   path: '/subuser',
               //   name: '广告计划审核',

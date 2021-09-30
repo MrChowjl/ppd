@@ -68,14 +68,14 @@ export async function getCurrent(id: any) {
 
 
 export async function deleteCurrent(params: any) {
-    return request('/v1/ad_unit_del', {
+    return request('/v1/ad_designs_del', {
         method: 'POST',
         data: params,
     });
 }
 
 export async function switchAccount(params: any) {
-    return request('/v1/ad_unit_open_close', {
+    return request('/v1/ad_designs_open_close', {
         method: 'POST',
         data: params,
     });

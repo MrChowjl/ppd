@@ -154,7 +154,7 @@ const Formt: React.FC<FormParams> = (props) => {
                 form.append('unit_id', unit || current?.ad_unit_id || '')
                 form.append('name', values.name || '')
                 form.append('ad_style_type', values.ad_style_type || '')
-                form.append('material_id', APPLogo?.value || trendsvideo?.value || '')
+                form.append('material_id', APPLogo?.value || trendsvideo?.value || current?.material_id || '')
                 form.append('material_url', APPLogo?.url || trendsvideo?.url || trendsurl || '')
                 form.append('ad_title', values.ad_title || '')
                 form.append('ad_info', values.ad_info || '')

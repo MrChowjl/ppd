@@ -146,8 +146,8 @@ const Formt: React.FC<FormParams> = (props) => {
                 adddate: current?.started_at ? 1 : 0,
                 dateplan: current && current?.started_at ? [current.started_at && moment(current.started_at * 1000).format('yyyy-MM-DD') || '', moment(current && current.stopped_at * 1000).format('yyyy-MM-DD') || ''] : null,
                 addtime: current?.started_hour ? 1 : 0,
-                shour: current?.started_hour && moment(current?.started_hour, 'HH:mm:ss'),
-                ehour: current?.stopped_hour && moment(current?.stopped_hour, 'HH:mm:ss'),
+                shour: current?.started_hour ? moment(current?.started_hour, 'HH:mm:ss') : null,
+                ehour: current?.stopped_hour ? moment(current?.stopped_hour, 'HH:mm:ss') : null,
                 addrate: (current?.frequency_show || current?.frequency_click) ? 1 : 0,
                 show_times: current?.frequency_show,
                 click_times: current?.frequency_click
