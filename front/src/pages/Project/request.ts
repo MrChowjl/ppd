@@ -53,3 +53,16 @@ export async function deleteQuly(params: any) {
         data: params,
     });
 }
+
+export async function queryAccount(params: any) {
+    return request('v1/ad_account_list', {
+        method: 'GET',
+        params: params
+    });
+}
+
+export async function getOptions() {
+    return request('v1/ad_accounts_section', {
+        method: 'GET'
+    });
+}

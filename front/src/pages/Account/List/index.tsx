@@ -28,15 +28,15 @@ const Page: React.FC = () => {
   const [editShow, seteditShow] = useState<boolean>(false)
   const [currentSelected, setcurrentSelected] = useState<Item | undefined>()
   const [options, setoptions] = useState<{
-    Media: { status: number; text: string }[],
-    Adhost: { status: number; text: string }[],
-    Cate: { status: number; text: string }[],
-    Status: { status: number; text: string }[],
+    Media: { status: number; text: string } | {},
+    Adhost: { status: number; text: string } | {},
+    Cate: { status: number; text: string } | {},
+    Status: { status: number; text: string } | {},
   }>({
-    Media: [],
-    Adhost: [],
-    Cate: [],
-    Status: []
+    Media: {},
+    Adhost: {},
+    Cate: {},
+    Status: {},
   })
   enum status {
     '待系统审核' = 'processing',
@@ -52,30 +52,30 @@ const Page: React.FC = () => {
   useEffect(() => {
     getOptions().then(res => {
       if (res.code === 1) {
-        let Media = []
-        let Adhost = []
-        let Cate = []
-        let Status = []
-        Media = res.data.adx?.map(itm => {
-          return {
+        let Media = {}
+        let Adhost = {}
+        let Cate = {}
+        let Status = {}
+        res.data.adx?.forEach(itm => {
+          Media[itm.id] = {
             status: itm.id,
             text: itm.name
           }
         })
-        Cate = res.data.category?.map(itm => {
-          return {
+        res.data.category?.forEach(itm => {
+          Cate[itm.id] = {
             status: itm.id,
             text: itm.name
           }
         })
-        Status = res.data.status?.map(itm => {
-          return {
+        res.data.status?.forEach(itm => {
+          Status[itm.id] = {
             status: itm.id,
             text: itm.name
           }
         })
-        Adhost = res.data.adv?.map(itm => {
-          return {
+        res.data.adv?.forEach(itm => {
+          Adhost[itm.id] = {
             status: itm.id,
             text: itm.name
           }

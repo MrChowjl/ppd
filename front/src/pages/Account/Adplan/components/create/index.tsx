@@ -28,11 +28,11 @@ const Page: React.FC = (props) => {
   const [editShow, seteditShow] = useState<boolean>(false)
   const [select, setselect] = useState<string>()
   const [option, setoption] = useState<{
-    plan?: any[],
-    unit?: any[]
+    plan?: {},
+    unit?: {}
   }>({
-    plan: [],
-    unit: []
+    plan: {},
+    unit: {}
   })
   useEffect(() => {
     GetOption()
@@ -40,23 +40,20 @@ const Page: React.FC = (props) => {
   const GetOption = async () => {
     let resPlan = await getPlan()
     let resUnit = await getUnit()
-    let rePlan = resPlan.data.list?.map(((itm: any) => {
-      return {
+    let rePlan = {}
+    resPlan.data.list?.forEach(((itm: any) => {
+      rePlan[itm.id] = {
         text: itm.name,
         status: itm.id
       }
     }))
-    let reUnit = resUnit.data.list?.map(((itm: any) => {
-      return {
+    let reUnit = {}
+    resUnit.data.list?.forEach(((itm: any) => {
+      reUnit[itm.id] = {
         text: itm.name,
         status: itm.id
       }
     }))
-    console.log({
-      ...{ plan: rePlan },
-      ...{ unit: reUnit },
-    })
-    
     setoption({
       ...{ plan: rePlan },
       ...{ unit: reUnit },
@@ -270,6 +267,9 @@ const Page: React.FC = (props) => {
             创建单元
           </Button>
         ]}
+        search={{
+          filterType: 'light'
+        }}
       />
       {editShow && <AccountEdit reload={() => actionRef.current?.reload()} Select={select} onCancel={() => seteditShow(false)} />}
     </>
