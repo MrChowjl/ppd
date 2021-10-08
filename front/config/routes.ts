@@ -99,6 +99,11 @@
                 component: './Subuser',
               },
               {
+                name: '人群包',
+                path: '/report',
+                component: './Report',
+              },
+              {
                 component: './404',
               },
             ],

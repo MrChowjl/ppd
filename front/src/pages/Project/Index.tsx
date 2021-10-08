@@ -6,7 +6,7 @@ import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import AccountEdit from './components/AccountEdit'
 import Qualifications from './components/Qualifications'
 import { queryList, deleteCurrent } from './request'
-
+import { history } from 'umi';
 type GithubIssueItem = {
   url: string;
   id: number;
@@ -26,7 +26,6 @@ type GithubIssueItem = {
 const Page: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [editShow, seteditShow] = useState<boolean>(false)
-  const [pagesize, setpagesize] = useState<number>(10)
   const [select, setselect] = useState<string>()
   const confirm = (id: string) => {
     deleteCurrent({ k: id.toString() }).then(res => {
@@ -45,6 +44,7 @@ const Page: React.FC = () => {
     {
       dataIndex: 'id',
       title: 'id',
+      hideInSearch: true,
       width: 48,
     },
     {
@@ -55,24 +55,30 @@ const Page: React.FC = () => {
     {
       title: '包含投放账户数',
       dataIndex: 'ad_acc_ids',
+      hideInSearch: true,
       ellipsis: true,
+      render: (e, r) => {
+        return r?.ad_acc_ids?.length
+      }
     },
     {
       title: '添加时间',
       dataIndex: 'created_at',
       valueType: 'dateTime',
+      hideInSearch: true,
       ellipsis: true,
     },
     {
       title: '操作',
       width: 255,
       valueType: 'option',
+      hideInSearch: true,
       render: (text, record, _, action) => [
-        <Button type="primary" disabled={record?.status === 1 ? true : false} onClick={() => {
+        <Button type="primary" onClick={() => {
+          history.push(`/report?id=${record.id}`)
+        }}>项目报表</Button>,
+        <Button type="primary"  onClick={() => {
           seteditShow(true)
-          setselect(record?.id)
-        }}>查看报表</Button>,
-        <Button type="primary" disabled={record?.status === 1 ? true : false} onClick={() => {
           setselect(record?.id)
         }}>编辑</Button>,
         <Popconfirm title="您将要删除本条项目？" placement="bottom" onConfirm={() => confirm(record?.id)} okText="Yes" cancelText="No">
@@ -102,7 +108,8 @@ const Page: React.FC = () => {
           const msg = await queryList({
             page: params.current,
             limit: params.pageSize,
-            sort: sort
+            sort: sort,
+            name: params.name
           });
           return {
             data: msg.data,
@@ -114,7 +121,6 @@ const Page: React.FC = () => {
           };
         }}
         rowKey="id"
-        search={false}
         form={{
           // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
           syncToUrl: (values, type) => {
@@ -128,7 +134,7 @@ const Page: React.FC = () => {
           },
         }}
         pagination={{
-          pageSize: pagesize,
+          pageSize: 20,
         }}
         dateFormatter="string"
         headerTitle={false}

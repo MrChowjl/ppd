@@ -38,7 +38,9 @@ const Formtable: React.FC<FormParams> = (props) => {
     const { onCancel, Select, reload } = props
     const [current, setcurrent] = useState<{
         name?: string;
+        id?: string;
     }>()
+    const [selectedRowKeys, setselectedRowKeys] = useState([])
     const [loading, setloading] = useState<boolean>(false)
     const actionRef = useRef<ActionType>();
     const [options, setoptions] = useState<{
@@ -52,6 +54,9 @@ const Formtable: React.FC<FormParams> = (props) => {
         Cate: {},
         Status: {},
     })
+    const onSelectChange = (selectedRowKeys: any) => {
+        setselectedRowKeys(selectedRowKeys)
+    };
     const columns: ProColumns<Item>[] = [
         {
             title: '所有广告主',
@@ -152,11 +157,11 @@ const Formtable: React.FC<FormParams> = (props) => {
             }
         })
     }, [])
-    const [industry, setindustry] = useState<any[]>([])
     useEffect(() => {
         Select && getCurrent({ k: Select }).then(res => {
             if (res.code === 1) {
                 setcurrent(res.data)
+                setselectedRowKeys(res.data.ad_acc_ids || [])
             }
         })
         getIndustry().then(res => {
@@ -169,7 +174,6 @@ const Formtable: React.FC<FormParams> = (props) => {
                         value: Number(keys[idx])
                     }
                 })
-                setindustry(ar)
             }
         })
     }, [])
@@ -190,8 +194,16 @@ const Formtable: React.FC<FormParams> = (props) => {
             }}
             onFinish={async (values) => {
                 console.log(values.file)
-                let obj = {}
-                let res = await mediaEdit({ ...values, ...obj });
+                if (selectedRowKeys.length < 1) {
+                    message.warning('投放账户必选！')
+                    return
+                }
+                let obj = {
+                    name: values?.name,
+                    id: current?.id,
+                    ad_acc_id: selectedRowKeys
+                }
+                let res = await mediaEdit(obj);
                 if (res.code === 1) {
                     message.success(res.msg);
                     reload()
@@ -214,7 +226,10 @@ const Formtable: React.FC<FormParams> = (props) => {
             />
             <Form.Item label="包含投放账户" valuePropName="checked">
                 {loading ? <ProTable
-                    rowSelection={{}}
+                    rowSelection={{
+                        selectedRowKeys,
+                        onChange: onSelectChange,
+                    }}
                     columns={columns}
                     actionRef={actionRef}
                     request={async (
@@ -235,6 +250,7 @@ const Formtable: React.FC<FormParams> = (props) => {
                             adv_id: params.adv_id,
                             adx_id: params.adx_id,
                             type: params.type,
+                            status: 3
                         });
                         return {
                             data: msg.data.list,
