@@ -29,7 +29,7 @@
                 path: '/index',
                 name: '首页',
                 icon: 'CloudOutlined',
-                component: './Index',
+                component: './index',
               },
               {
                 path: '/list',
