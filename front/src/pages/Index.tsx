@@ -25,7 +25,8 @@ type Item = {
 };
 export default (): React.ReactNode => {
   const actionRef = useRef<ActionType>();
-  const [count, setCount] = useState()
+  const [count, setCount] = useState();
+  const [loading, setloading] = useState(false);
   const [options, setoptions] = useState<{
     Media: { status: number; text: string } | {},
     Adhost: { status: number; text: string } | {},
@@ -80,6 +81,7 @@ export default (): React.ReactNode => {
           }
         })
         setoptions({ ...options, Media, Cate, Status, Adhost })
+        setloading(true)
       }
     })
     getCount().then(res => {
@@ -139,12 +141,6 @@ export default (): React.ReactNode => {
       },
     },
     {
-      title: '开关',
-      dataIndex: 'status',
-      hideInSearch: true,
-      ellipsis: true,
-    },
-    {
       title: '状态',
       dataIndex: 'status',
       hideInSearch: true,
@@ -161,7 +157,7 @@ export default (): React.ReactNode => {
     },
     {
       dataIndex: 'adx_name',
-      title: '媒体',
+      title: '投放媒体',
       hideInSearch: true,
     },
     {
@@ -170,44 +166,34 @@ export default (): React.ReactNode => {
       hideInSearch: true,
     },
     {
-      dataIndex: 'budget_all',
-      title: '总预算',
-      hideInSearch: true,
-    },
-    {
-      dataIndex: 'budget_day',
-      title: '日预算',
-      hideInSearch: true,
-    },
-    {
       dataIndex: 'balance',
       title: '剩余金额',
       hideInSearch: true,
     },
     {
-      dataIndex: 'day_used',
-      title: '今日消耗',
+      title: '消耗情况',
       hideInSearch: true,
+      render: (r, t) => {
+        return (
+          <div style={{ lineHeight: 1.5 }}>
+            <div>今：{t.day_used || 0}</div>
+            <div>昨：{t.yesterday_used || 0}</div>
+          </div>
+        )
+      }
     },
     {
-      dataIndex: 'yesterday_used',
-      title: '昨日消耗',
+      title: '投放计划',
       hideInSearch: true,
-    },
-    {
-      dataIndex: 'plan_num',
-      title: '计划数',
-      hideInSearch: true,
-    },
-    {
-      dataIndex: 'unit_num',
-      title: '单元数',
-      hideInSearch: true,
-    },
-    {
-      dataIndex: 'design_num',
-      title: '创意数',
-      hideInSearch: true,
+      render: (r, t) => {
+        return (
+          <div style={{ lineHeight: 1.5 }}>
+            <div>{t.plan_num || 0}个计划</div>
+            <div>{t.unit_num || 0}个单元</div>
+            <div>{t.design_num || 0}个创意</div>
+          </div>
+        )
+      }
     },
     {
       title: '操作',
@@ -260,7 +246,7 @@ export default (): React.ReactNode => {
           </Row>
         </div>
       </Card>
-      <ProTable
+      {loading ? <ProTable
         columns={columns}
         actionRef={actionRef}
         request={async (
@@ -284,7 +270,7 @@ export default (): React.ReactNode => {
             status: params.status
           });
           return {
-            data: msg.data.list,
+            data: Object.values(msg.data.list),
             // success 请返回 true，
             // 不然 table 会停止解析数据，即使有数据
             success: true,
@@ -304,7 +290,7 @@ export default (): React.ReactNode => {
         }}
         headerTitle={false}
         dateFormatter="string"
-      />
+      /> : null}
     </PageContainer>
   );
 };

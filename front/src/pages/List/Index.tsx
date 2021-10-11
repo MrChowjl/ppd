@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Statistic, Row, Col, Button, Card, Badge } from 'antd';
+import { Statistic, Row, Col, Button, Card, Tabs } from 'antd';
+import { DualAxes } from '@ant-design/charts';
+const { TabPane } = Tabs;
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 import {
   QueryFilter,
@@ -15,6 +17,7 @@ import ProTable from '@ant-design/pro-table';
 import { queryList, getCount, getAccount, getPlan, getUnit, getCreate } from './request'
 import styles from './home.less';
 import { history } from 'umi';
+import moment from 'moment';
 type Item = {
   url: string;
   id: number;
@@ -34,6 +37,7 @@ type Item = {
 export default (): React.ReactNode => {
   const actionRef = useRef<ActionType>();
   const [account, setAccount] = useState()
+  const [data, setdatalist] = useState()
   const [currentaccount, setcurrentaccount] = useState()
   const [plan, setPlan] = useState()
   const [currentplan, setcurrentplan] = useState()
@@ -110,95 +114,75 @@ export default (): React.ReactNode => {
   }, [currentunit])
   const columns: ProColumns<Item>[] = [
     {
-      dataIndex: 'id',
-      title: 'id',
+      title: '所属账户',
+      dataIndex: 'account_name',
       hideInSearch: true,
-      width: 48,
+      ellipsis: true,
     },
     {
-      title: '投放账户名称',
-      dataIndex: 'name',
+      title: '所属计划',
+      dataIndex: 'plan_name',
       hideInSearch: true,
+      ellipsis: true,
+    },
+    {
+      title: '所属单元',
+      dataIndex: 'unit_name',
+      hideInSearch: true,
+      ellipsis: true,
+    },
+    {
+      title: '时间',
+      hideInSearch: true,
+      ellipsis: true,
       width: 150,
-      ellipsis: true,
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: '此项为必填项',
-          },
-        ],
-      },
+      render: (r, t) => {
+        return moment(t.time_sign * 1000).format('yyyy-MM-DD HH:mm:ss')
+      }
     },
     {
-      title: '开关',
-      dataIndex: 'status',
-      hideInSearch: true,
-      ellipsis: true,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      hideInSearch: true,
-      width: 120,
-      filters: true,
-      render: (_, item) => {
-        return <Badge status={status[item.status]} text={item.status} />;
-      },
-    },
-    {
-      dataIndex: 'adv_name',
-      title: '广告主',
+      dataIndex: 'cost_num',
+      title: '消耗',
       hideInSearch: true,
     },
     {
-      dataIndex: 'adx_name',
-      title: '媒体',
+      dataIndex: 'show_num_pv',
+      title: '曝光',
       hideInSearch: true,
     },
     {
-      dataIndex: 'category',
-      title: '投放类型',
+      dataIndex: 'cpm',
+      title: 'CPM',
       hideInSearch: true,
     },
     {
-      dataIndex: 'budget_all',
-      title: '总预算',
+      dataIndex: 'click_num_pv',
+      title: '点击',
       hideInSearch: true,
     },
     {
-      dataIndex: 'budget_day',
-      title: '日预算',
+      dataIndex: 'click_percent',
+      title: '点击率',
       hideInSearch: true,
     },
     {
-      dataIndex: 'balance',
-      title: '剩余金额',
+      dataIndex: 'cpc',
+      title: 'CPC',
       hideInSearch: true,
     },
     {
-      dataIndex: 'day_used',
-      title: '今日消耗',
+      dataIndex: 'valid_num',
+      title: '转化',
       hideInSearch: true,
     },
     {
-      dataIndex: 'yesterday_used',
-      title: '昨日消耗',
+      dataIndex: 'valid_percent',
+      title: '转化率',
       hideInSearch: true,
     },
     {
-      dataIndex: 'plan_num',
-      title: '计划数',
-      hideInSearch: true,
-    },
-    {
-      dataIndex: 'unit_num',
-      title: '单元数',
-      hideInSearch: true,
-    },
-    {
-      dataIndex: 'design_num',
-      title: '创意数',
+      dataIndex: 'cpa',
+      title: 'CPA',
       hideInSearch: true,
     },
     {
@@ -220,7 +204,15 @@ export default (): React.ReactNode => {
           company: string;
         }>
           onFinish={async (values) => {
-            await queryList(values)
+            let obj = {
+              sdate: values?.time?.[0],
+              edate: values?.time?.[1],
+            }
+            await queryList({ ...values, ...obj }).then(res => {
+              if (res.code === 1) {
+                setdatalist(res.data)
+              }
+            })
             console.log(values.name);
           }}
         >
@@ -231,11 +223,7 @@ export default (): React.ReactNode => {
             options={account}
             fieldProps={{
               onChange: (value) => {
-                let obj = {
-                  sdate: value?.time[0],
-                  edate: value?.time[1],
-                }
-                setcurrentaccount({ ...value, ...obj })
+                setcurrentaccount(value)
               }
             }}
           />
@@ -273,38 +261,179 @@ export default (): React.ReactNode => {
           />
         </QueryFilter>
       </Card>
+      <Card bordered={false}>
+        <Tabs defaultActiveKey="10" centered tabBarGutter={90}>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="剩余金额" prefix="￥" value={data?.cost_num} />
+          } key="1">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="CPM" prefix="￥" value={data?.cpm} />
+          } key="2">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="曝光" value={data?.show_num_pv} />
+          } key="3">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="点击" value={data?.click_num_pv} />
+          } key="4">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="点击率" suffix="%" value={data?.click_percent ? data?.click_percent * 100 : 0} />
+          } key="5">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="CPC" prefix="￥" value={data?.cpc} />
+          } key="6">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="转化" value={data?.valid_num} />
+          } key="7">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="转化率" suffix="%" value={data?.valid_percent ? data?.valid_percent * 100 : 0} />
+          } key="8">
+          </TabPane>
+          <TabPane tab={
+            <Statistic valueStyle={{ fontSize: 34 }} title="CPA" prefix="￥" value={data?.cpa} />
+          } key="9">
+          </TabPane>
+        </Tabs>
+      </Card>
+      <Card bordered={false}>
+        <DualAxes {...{
+          data: [[{
+            year: '1991',
+            value: 3,
+            count: 10,
+          },
+          {
+            year: '1992',
+            value: 4,
+            count: 4,
+          },
+          {
+            year: '1993',
+            value: 3.5,
+            count: 5,
+          },
+          {
+            year: '1994',
+            value: 5,
+            count: 5,
+          },
+          {
+            year: '1995',
+            value: 4.9,
+            count: 4.9,
+          },
+          {
+            year: '1996',
+            value: 6,
+            count: 35,
+          },
+          {
+            year: '1997',
+            value: 7,
+            count: 7,
+          },
+          {
+            year: '1998',
+            value: 9,
+            count: 1,
+          },
+          {
+            year: '1999',
+            value: 13,
+            count: 20,
+          },], [{
+            year: '1991',
+            value: 3,
+            count: 10,
+          },
+          {
+            year: '1992',
+            value: 4,
+            count: 4,
+          },
+          {
+            year: '1993',
+            value: 3.5,
+            count: 5,
+          },
+          {
+            year: '1994',
+            value: 5,
+            count: 5,
+          },
+          {
+            year: '1995',
+            value: 4.9,
+            count: 4.9,
+          },
+          {
+            year: '1996',
+            value: 6,
+            count: 35,
+          },
+          {
+            year: '1997',
+            value: 7,
+            count: 7,
+          },
+          {
+            year: '1998',
+            value: 9,
+            count: 1,
+          },
+          {
+            year: '1999',
+            value: 13,
+            count: 20,
+          },]],
+          legend: {
+            position: 'top'
+          },
+          xField: 'year',
+          yField: ['value', 'count'],
+          geometryOptions: [
+            {
+              geometry: 'line',
+              color: '#5B8FF9',
+              smooth: true,
+              point: {
+                shape: 'circle',
+                size: 4,
+                style: {
+                  opacity: 0.5,
+                  stroke: '#5B8FF9',
+                  fill: '#fff',
+                },
+              },
+            },
+            {
+              geometry: 'line',
+              color: '#5AD8A6',
+              smooth: true,
+              point: {
+                shape: 'circle',
+                size: 4,
+                style: {
+                  opacity: 0.5,
+                  stroke: '#5AD8A6',
+                  fill: '#fff',
+                },
+              },
+            },
+          ],
+        }} />
+      </Card>
       <ProTable
+        options={false}
         columns={columns}
         actionRef={actionRef}
-        request={async (
-          // 第一个参数 params 查询表单和 params 参数的结合
-          // 第一个参数中一定会有 pageSize 和  current ，这两个参数是 antd 的规范
-          params: T & {
-            pageSize: number;
-            current: number;
-          },
-          sort,
-          filter,
-        ) => {
-          // 这里需要返回一个 Promise,在返回之前你可以进行数据转化
-          // 如果需要转化参数可以在这里进行修改
-          const msg = await queryList({
-            page: params.current,
-            limit: params.pageSize,
-            adv_id: params.adv_id,
-            adx_id: params.adx_id,
-            type: params.type,
-            status: params.status
-          });
-          return {
-            data: msg.data.list,
-            // success 请返回 true，
-            // 不然 table 会停止解析数据，即使有数据
-            success: true,
-            // 不传会使用 data 的长度，如果是分页一定要传
-            total: msg.data.count,
-          };
-        }}
+        dataSource={data?.list}
         editable={{
           type: 'multiple',
         }}
